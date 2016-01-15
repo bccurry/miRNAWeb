@@ -5,7 +5,7 @@ app.directive('searchSection', function () {
             //@ reads the attribute value, = provides two-way binding, & works with functions
             title: '@'
         },
-        templateUrl: 'Templates/SearchSection.html',
+        templateUrl: 'Angular/Templates/SearchSection.html',
         link: function ($scope) { } //DOM manipulation
     };
 });
