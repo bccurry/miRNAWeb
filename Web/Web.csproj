@@ -133,8 +133,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Angular\Controllers\MainCtrl.js" />
-    <Content Include="Angular\Directives\SearchSection.js" />
     <Content Include="Angular\Services\VectorSvc.js" />
+    <Content Include="Angular\Templates\HeaderSection.html" />
+    <Content Include="Angular\Templates\ResultSection.html" />
     <Content Include="Angular\Templates\SearchSection.html" />
     <Content Include="Angular\Views\Main.html" />
     <Content Include="Content\ui-bootstrap-csp.css" />
@@ -993,7 +994,6 @@
     <Content Include="Scripts\Angular\angular-aria.min.js.map" />
     <Content Include="Scripts\Angular\angular-animate.min.js.map" />
     <Content Include="Angular\Controllers\MainCtrl.js.map" />
-    <Content Include="Angular\Directives\SearchSection.js.map" />
     <Content Include="Angular\Services\VectorSvc.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1018,6 +1018,8 @@
     <TypeScriptCompile Include="Angular\Controllers\MainCtrl.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Angular\Directives\HeaderSection.ts" />
+    <TypeScriptCompile Include="Angular\Directives\ResultSection.ts" />
     <TypeScriptCompile Include="Angular\Directives\SearchSection.ts" />
     <TypeScriptCompile Include="Angular\Services\VectorSvc.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />
