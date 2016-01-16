@@ -13,5 +13,4 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', ($state
             templateUrl: 'Angular/Views/Main.html',
             controller: 'mainCtrl'
         });
-
 }]);

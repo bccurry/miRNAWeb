@@ -6,23 +6,32 @@ using Data.Queries;
 
 namespace Web.Controllers
 {
-    [RoutePrefix("default")]
-    public class DefaultController : ApiController
+    [RoutePrefix("api/search")]
+    public class SearchController : ApiController
     {
         private readonly IQueryDispatcher _qry;
         private readonly ICommandDispatcher _cmd;
 
-        public DefaultController(IQueryDispatcher qry, ICommandDispatcher cmd)
+        public SearchController(IQueryDispatcher qry, ICommandDispatcher cmd)
         {
             _qry = qry;
             _cmd = cmd;
         }
 
-        [HttpGet]
+        
         [Route("getallvectors")]
+        [HttpGet]
         public IEnumerable<Vector> GetAllVectors()
         {         
            return _qry.Dispatch(new GetAllVectorsQuery());
+        }
+
+        
+        [Route("validatesearchterms")]
+        [HttpPost]
+        public string ValidateSearchTerms()
+        {
+            return "x";
         }
     }
 }

@@ -17,11 +17,11 @@ namespace Web
         }   
 
         // Adjust Path For UI Router
-        protected void Application_BeginRequest(Object sender, EventArgs e)
-        {
-            string url = Request.Url.LocalPath;
-            if (!System.IO.File.Exists(Context.Server.MapPath(url)))
-                Context.RewritePath(RootDocument);
-        }
+//        protected void Application_BeginRequest(Object sender, EventArgs e)
+//        {
+//            string url = Request.Url.LocalPath;
+//            if (!System.IO.File.Exists(Context.Server.MapPath(url)))
+//                Context.RewritePath(RootDocument);
+//        }
     }
 }
