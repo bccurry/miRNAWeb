@@ -9,7 +9,7 @@ var SearchSection = (function () {
         this.templateUrl = 'Angular/Templates/SearchSection.html';
         this.link = function (scope) {
             scope.compute = function () {
-                _this.searchSvc.validateSearchTerms(scope.searchList).then(function (result) { });
+                _this.searchSvc.validateSearchTerms(scope.searchList).then(function (result) { console.log(result.data); });
             };
         };
         this.searchSvc = searchSvc;
@@ -17,3 +17,4 @@ var SearchSection = (function () {
     return SearchSection;
 })();
 app.directive('searchSection', ['searchSvc', function (searchSvc) { return new SearchSection(searchSvc); }]);
+//# sourceMappingURL=SearchSection.js.map

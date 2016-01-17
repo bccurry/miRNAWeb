@@ -12,8 +12,9 @@ class SearchSvc implements ISearchSvc {
     }
 
     validateSearchTerms(searchList: string) {
-        var url = '/search/validatesearchterms/';
-        return this.$http.post(url, searchList);
+        console.log(searchList);
+        var url = 'api/search/validatesearchterms/';
+        return this.$http.post(url, JSON.stringify(searchList));
     }
 }
 

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using Data.Dispatchers;
 using Data.Models;
@@ -29,9 +31,16 @@ namespace Web.Controllers
         
         [Route("validatesearchterms")]
         [HttpPost]
-        public string ValidateSearchTerms()
+        public string ValidateSearchTerms([FromBody]string searchTermList)
         {
-            return "x";
+            char[] delimiters = new char[] { '\r', '\n', ';', ',' };
+            string[] searchTermArray = searchTermList.Split(delimiters,
+                     StringSplitOptions.RemoveEmptyEntries);
+
+            var resultArray = searchTermArray.Select(x => new { Term = x,
+                Availiable = _qry.Dispatch(new ValidateSearchTermQuery(x)) });
+
+            return resultArray.Any(x => x.Availiable == false) ? "ERROR" : null;
         }
     }
 }

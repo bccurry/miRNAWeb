@@ -4,9 +4,11 @@ var SearchSvc = (function () {
         this.$q = $q;
     }
     SearchSvc.prototype.validateSearchTerms = function (searchList) {
-        var url = '/search/validatesearchterms/';
-        return this.$http.post(url, searchList);
+        console.log(searchList);
+        var url = 'api/search/validatesearchterms/';
+        return this.$http.post(url, JSON.stringify(searchList));
     };
     return SearchSvc;
 })();
 app.service('searchSvc', ['$http', '$q', function ($http, $q) { return new SearchSvc($http, $q); }]);
+//# sourceMappingURL=SearchSvc.js.map
