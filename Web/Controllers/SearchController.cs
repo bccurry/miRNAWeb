@@ -19,28 +19,25 @@ namespace Web.Controllers
             _qry = qry;
             _cmd = cmd;
         }
-
-        
-        [Route("getallvectors")]
-        [HttpGet]
-        public IEnumerable<Vector> GetAllVectors()
-        {         
-           return _qry.Dispatch(new GetAllVectorsQuery());
-        }
-
-        
+  
         [Route("validatesearchterms")]
         [HttpPost]
-        public string ValidateSearchTerms([FromBody]string searchTermList)
+        public void ValidateSearchTerms([FromBody]string searchTermList)
         {
-            char[] delimiters = new char[] { '\r', '\n', ';', ',' };
+            char[] delimiters = new char[] { '\r', '\n', ';', ',', '|' };
             string[] searchTermArray = searchTermList.Split(delimiters,
                      StringSplitOptions.RemoveEmptyEntries);
 
-            var resultArray = searchTermArray.Select(x => new { Term = x,
-                Availiable = _qry.Dispatch(new ValidateSearchTermQuery(x)) });
+            var resultArray = searchTermArray.Select(x => _qry.Dispatch(new ValidateSearchTermQuery(x)));
+            var mirnaVectorIds = _qry.Dispatch(new AllVectorIdsQuery());
 
-            return resultArray.Any(x => x.Availiable == false) ? "ERROR" : null;
+            foreach (var result in resultArray)
+            {
+               
+            }
+
         }
+
+        
     }
 }

@@ -8,8 +8,6 @@ namespace Data.Models
 {
     public class Vector
     {
-        public int VectorId { get; set; }
-        public int VectorMetaDataId { get; set; }
-        public float Value { get; set; }
+        public IEnumerable<float> Values { get; set; }
     }
 }
