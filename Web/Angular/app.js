@@ -1,4 +1,5 @@
 var app = angular.module('mirnaApp', ['ui.router']);
+app.value('$', $);
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $locationProvider) {
         $locationProvider.html5Mode({
             enabled: true,
@@ -12,3 +13,4 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', functio
             controller: 'mainCtrl'
         });
     }]);
+//# sourceMappingURL=app.js.map

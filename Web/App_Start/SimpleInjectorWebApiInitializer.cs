@@ -1,5 +1,8 @@
 using AForge.Math.Metrics;
 using Data.Dispatchers;
+using Microsoft.AspNet.SignalR;
+using Web.Factories;
+using Web.Hubs;
 
 [assembly: WebActivator.PostApplicationStartMethod(typeof(Web.App_Start.SimpleInjectorWebApiInitializer), "Initialize")]
 
@@ -31,7 +34,19 @@ namespace Web.App_Start
         {
             container.Register<IQueryDispatcher, QueryDispatcher>(Lifestyle.Singleton);
             container.Register<ICommandDispatcher, CommandDispatcher>(Lifestyle.Singleton);
+            container.Register<IMessageHub, MessageHub>(Lifestyle.Transient);
+            container.RegisterInitializer<MessageHub>(x =>
+            {
+                x.UpdateProfileRequestAction =
+                    (profileRequestId) =>
+                    {
+                        GlobalHost.ConnectionManager.GetHubContext<MessageHub>()
+                            .Clients.All.showCPSUpdate(profileRequestId);
+                        return true;
+                    };
+            });
             container.Register<CosineSimilarity>(Lifestyle.Singleton);
+            container.Register<ISearchFactory, SearchFactory>(Lifestyle.Singleton);
             // For instance:
             // container.Register<IUserRepository, SqlUserRepository>(Lifestyle.Scoped);
         }

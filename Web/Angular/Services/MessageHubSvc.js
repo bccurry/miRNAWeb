@@ -31,3 +31,4 @@ app.service('messageHubSvc', ['$', '$rootScope',
         return new MessageHubSvc($, $rootScope);
     }
 ]);
+//# sourceMappingURL=MessageHubSvc.js.map

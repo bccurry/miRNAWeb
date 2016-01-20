@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 using System.Web.Http;
 using Data.Dispatchers;
-using Data.Models;
 using Data.Queries;
 using AForge.Math.Metrics;
+using Microsoft.AspNet.SignalR;
+using Web.Factories;
+using Web.Hubs;
 
 namespace Web.Controllers
 {
@@ -17,13 +16,13 @@ namespace Web.Controllers
     {
         private readonly IQueryDispatcher _qry;
         private readonly ICommandDispatcher _cmd;
-        private readonly CosineSimilarity _cs;
+        private readonly ISearchFactory _searchFactory;
 
-        public SearchController(IQueryDispatcher qry, ICommandDispatcher cmd, CosineSimilarity cs)
+        public SearchController(IQueryDispatcher qry, ICommandDispatcher cmd, ISearchFactory searchFactory)
         {
             _qry = qry;
             _cmd = cmd;
-            _cs = cs;
+            _searchFactory = searchFactory;
         }
   
         [Route("")]
@@ -51,7 +50,7 @@ namespace Web.Controllers
             {
                 Name = x.Name,
                 Type = x.Type,
-                Value = _cs.GetSimilarityScore(compositeVector.Values, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values)
+                Value = _searchFactory.ComputeCosineSimilarity(compositeVector.Values, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values)
             }).OrderByDescending(x => x.Value).Take(50);
 
             stopWatch.Stop();
@@ -85,7 +84,7 @@ namespace Web.Controllers
             {
                 Name = x.Name,
                 Type = x.Type,
-                Value = _cs.GetSimilarityScore(compositeVector.Values, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values)
+                Value = _searchFactory.ComputeCosineSimilarity(compositeVector.Values, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values)
             }).OrderByDescending(x => x.Value).Take(50);
 
             stopWatch.Stop();
