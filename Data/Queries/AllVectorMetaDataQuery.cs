@@ -9,17 +9,18 @@ using System.Threading.Tasks;
 using Dapper;
 using Data.Dispatchers;
 using Data.Gateways;
+using Data.Models;
 
 namespace Data.Queries
 {
-    public class AllVectorIdsQuery: IQuery<IEnumerable<int>>
+    public class AllVectorMetaDataQuery: IQuery<IEnumerable<VectorMetaData>>
     {
-        public IEnumerable<int> Retrieve()
+        public IEnumerable<VectorMetaData> Retrieve()
         {
             using (IDbConnection connection = new SqlConnection(MirnaGateway.Connection))
             {
-                const string storedProcedure = "dbo.GetAllVectorIds";                
-                return connection.Query<int>(storedProcedure, null, commandType: CommandType.StoredProcedure);
+                const string storedProcedure = "dbo.GetAllVectorMetaData";                
+                return connection.Query<VectorMetaData>(storedProcedure, null, commandType: CommandType.StoredProcedure);
             }
         }
     }

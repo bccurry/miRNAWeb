@@ -17,4 +17,3 @@ var SearchSection = (function () {
     return SearchSection;
 })();
 app.directive('searchSection', ['searchSvc', function (searchSvc) { return new SearchSection(searchSvc); }]);
-//# sourceMappingURL=SearchSection.js.map

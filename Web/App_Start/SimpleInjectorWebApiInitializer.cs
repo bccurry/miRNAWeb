@@ -1,3 +1,4 @@
+using AForge.Math.Metrics;
 using Data.Dispatchers;
 
 [assembly: WebActivator.PostApplicationStartMethod(typeof(Web.App_Start.SimpleInjectorWebApiInitializer), "Initialize")]
@@ -30,6 +31,7 @@ namespace Web.App_Start
         {
             container.Register<IQueryDispatcher, QueryDispatcher>(Lifestyle.Singleton);
             container.Register<ICommandDispatcher, CommandDispatcher>(Lifestyle.Singleton);
+            container.Register<CosineSimilarity>(Lifestyle.Singleton);
             // For instance:
             // container.Register<IUserRepository, SqlUserRepository>(Lifestyle.Scoped);
         }

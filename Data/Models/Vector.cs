@@ -8,6 +8,6 @@ namespace Data.Models
 {
     public class Vector
     {
-        public IEnumerable<float> Values { get; set; }
+        public double[] Values { get; set; }
     }
 }

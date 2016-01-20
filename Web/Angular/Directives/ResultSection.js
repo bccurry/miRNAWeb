@@ -9,4 +9,3 @@ app.directive('resultSection', function () {
         link: function ($scope) { } //DOM manipulation
     };
 });
-//# sourceMappingURL=ResultSection.js.map
