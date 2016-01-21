@@ -1,4 +1,7 @@
 app.controller('mainCtrl', ['$scope', 'messageHubSvc', function ($scope, messageHubSvc) {
         messageHubSvc.connect();
-        //messageHubSvc.sendRequest();
+        $scope.$on('percentageFinishedClient', function (event, percentageFinished) {
+            $scope.percentageFinished = percentageFinished;
+        });
     }]);
+//# sourceMappingURL=MainCtrl.js.map

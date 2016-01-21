@@ -12,8 +12,9 @@ var MessageHubSvc = (function () {
         }).fail(function (error) {
             console.log('Invocation of start failed. Error: ' + error);
         });
-        this.proxy.on('percentageFinishedClient', function (count) {
-            innerThis.$rootScope.$broadcast('percentageFinishedClient', count);
+        this.proxy.on('percentageFinishedClient', function (percentageFinished) {
+            console.log("BRANDON " + percentageFinished);
+            innerThis.$rootScope.$broadcast('percentageFinishedClient', percentageFinished);
         });
     };
     MessageHubSvc.prototype.isConnecting = function () {
@@ -36,3 +37,4 @@ app.service('messageHubSvc', ['$', '$rootScope',
         return new MessageHubSvc($, $rootScope);
     }
 ]);
+//# sourceMappingURL=MessageHubSvc.js.map

@@ -17,12 +17,14 @@ namespace Web.Controllers
         private readonly IQueryDispatcher _qry;
         private readonly ICommandDispatcher _cmd;
         private readonly ISearchFactory _searchFactory;
-
+        private readonly IHubContext _hubContext;
         public SearchController(IQueryDispatcher qry, ICommandDispatcher cmd, ISearchFactory searchFactory)
         {
             _qry = qry;
             _cmd = cmd;
             _searchFactory = searchFactory;
+            _hubContext =
+                        GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
         }
   
         [Route("")]
@@ -44,12 +46,12 @@ namespace Web.Controllers
 
             // Get all mirna Vector Ids
             var mirnaVectorIds = _qry.Dispatch(new AllVectorMetaDataQuery());
-            
-            var results = mirnaVectorIds.AsParallel().Select(x => new
+            var mirnaVectorCount = mirnaVectorIds.Count();
+            var results = mirnaVectorIds.AsParallel().Select((x, idx) => new
             {
                 Name = x.Name,
                 Type = x.Type,
-                Value = _searchFactory.ComputeCosineSimilarity(compositeVector.Values, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values)
+                Value = _searchFactory.ComputeCosineSimilarity(compositeVector.Values, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx, mirnaVectorCount)
             }).OrderByDescending(x => x.Value).Take(50);
             
 
@@ -76,12 +78,12 @@ namespace Web.Controllers
 
             // Get all mirna Vector Ids
             var mirnaVectorIds = _qry.Dispatch(new AllVectorMetaDataQuery());
-
-            var results = mirnaVectorIds.AsParallel().Select(x => new
+            var mirnaVectorCount = mirnaVectorIds.Count();
+            var results = mirnaVectorIds.AsParallel().Select((x, idx) => new
             {
                 Name = x.Name,
                 Type = x.Type,
-                Value = _searchFactory.ComputeCosineSimilarity(compositeVector.Values, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values)
+                Value = _searchFactory.ComputeCosineSimilarity(compositeVector.Values, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx, mirnaVectorCount)
             }).OrderByDescending(x => x.Value).Take(50);
 
             stopWatch.Stop();
@@ -90,6 +92,12 @@ namespace Web.Controllers
             return results;
         }
 
-        
+        [Route("test2")]
+        [HttpGet]
+        public string Test2()
+        {
+            _hubContext.Clients.All.percentageFinishedClient("23");
+            return "hry";
+        }
     }
 }

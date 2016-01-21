@@ -1,8 +1,9 @@
 ﻿class SearchSection implements angular.IDirective {
     private searchSvc: ISearchSvc;
-
-    constructor(searchSvc) {
+    private messageHubSvc: IMessageHubSvc;
+    constructor(searchSvc, messageHubSvc) {
         this.searchSvc = searchSvc;
+        this.messageHubSvc = messageHubSvc;
     }
 
     restrict = 'E'; //E = element, A = attribute, C = class, M = comment         
@@ -15,15 +16,18 @@
   
 
     link = (scope) => {
+        //this.messageHubSvc.connect();
         
         scope.compute = () => {
-            this.searchSvc.validateSearchTerms(scope.searchList).then((result) => { console.log(result.data) });
+            //console.log(this.messageHubSvc.isConnected());
+            this.searchSvc.test2().then((result) => {});
+            //this.searchSvc.validateSearchTerms(scope.searchList).then((result) => { console.log(result.data) });
         };
     
     }
 }
 
-app.directive('searchSection', ['searchSvc', (searchSvc) => { return new SearchSection(searchSvc); }]);
+app.directive('searchSection', ['searchSvc', 'messageHubSvc', (searchSvc, messageHubSvc) => { return new SearchSection(searchSvc, messageHubSvc); }]);
  
 
 

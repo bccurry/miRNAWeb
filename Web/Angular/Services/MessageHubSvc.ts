@@ -27,10 +27,11 @@ class MessageHubSvc implements IMessageHubSvc {
             console.log(innerThis.isConnected());
         }).fail((error) => {
             console.log('Invocation of start failed. Error: ' + error);
-            });
+        });
 
-        this.proxy.on('percentageFinishedClient', (count: string) => {
-            innerThis.$rootScope.$broadcast('percentageFinishedClient', count);
+        this.proxy.on('percentageFinishedClient', (percentageFinished: number) => {
+            console.log("BRANDON " + percentageFinished);
+            innerThis.$rootScope.$broadcast('percentageFinishedClient', percentageFinished);
         });
 
     }

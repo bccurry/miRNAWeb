@@ -19,3 +19,4 @@ var ResultSection = (function () {
     return ResultSection;
 })();
 app.directive('resultSection', ['messageHubSvc', function (messageHubSvc) { return new ResultSection(messageHubSvc); }]);
+//# sourceMappingURL=ResultSection.js.map

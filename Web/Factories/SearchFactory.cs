@@ -6,7 +6,7 @@ namespace Web.Factories
 {
     public interface ISearchFactory
     {
-        double ComputeCosineSimilarity(double[] compositeVector, double[] comparedVector);
+        double ComputeCosineSimilarity(double[] compositeVector, double[] comparedVector, int index, int total);
     }
 
     public class SearchFactory: ISearchFactory
@@ -24,11 +24,17 @@ _hubContext =
             _cs = cs;
         }
 
-        public double ComputeCosineSimilarity(double[] compositeVector, double [] comparedVector)
+        public double ComputeCosineSimilarity(double[] compositeVector, double [] comparedVector, int current, int total)
         {
 //            _messageHub.UpdatePercentageFinished(22222);
-            _hubContext.Clients.All.percentageFinishedClient("2222");
+            var percentageFinished = ComputePercentageFinished(current, total);
+            _hubContext.Clients.All.percentageFinishedClient(percentageFinished);
             return _cs.GetSimilarityScore(compositeVector, comparedVector);
+        }
+
+        public double ComputePercentageFinished(double current, double total)
+        {
+            return current / total;
         }
     }
 }
