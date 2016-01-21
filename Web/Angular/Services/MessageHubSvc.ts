@@ -3,6 +3,7 @@
     isConnecting();
     isConnected();
     connectionState();
+    sendRequest();
 }
 
 class MessageHubSvc implements IMessageHubSvc {
@@ -19,15 +20,19 @@ class MessageHubSvc implements IMessageHubSvc {
     connect() {
 
         this.connection = this.$.hubConnection();
-        this.proxy = this.connection.createHubProxy('perfProfileHub');
-        var _this = this;
-        this.proxy.on('newRequestMessageClient', (isNewRequests: boolean) => {
-            _this.$rootScope.$broadcast('newRequestMessageClient', isNewRequests);
+        this.proxy = this.connection.createHubProxy('messageHub');
+        var innerThis = this;
+
+        this.connection.start().done(() => {
+            console.log(innerThis.isConnected());
+        }).fail((error) => {
+            console.log('Invocation of start failed. Error: ' + error);
+            });
+
+        this.proxy.on('percentageFinishedClient', (count: string) => {
+            innerThis.$rootScope.$broadcast('percentageFinishedClient', count);
         });
-        this.proxy.on('showCPSUpdate', (profileRequestId: number) => {
-            _this.$rootScope.$broadcast('showCPSUpdate', profileRequestId);
-        });
-        this.connection.start();
+
     }
 
     isConnecting() {
@@ -41,6 +46,11 @@ class MessageHubSvc implements IMessageHubSvc {
     connectionState() {
         return this.connection.state;
     }
+
+    sendRequest() {
+    //Invoking greetAll method defined in hub
+    this.proxy.invoke('greetAll');
+}
 }
 
 app.service('messageHubSvc', ['$', '$rootScope',

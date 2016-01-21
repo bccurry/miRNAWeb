@@ -9,11 +9,16 @@ namespace Web.Hubs
 {
     public interface IMessageHub 
     {
-        Func<int, bool> UpdateProfileRequestAction { get; set; }
+        Func<int, bool> UpdatePercentageFinished { get; set; }
     }
 
     public class MessageHub : Hub, IMessageHub
     {
-        public Func<int, bool> UpdateProfileRequestAction { get; set; }
+        public Func<int, bool> UpdatePercentageFinished { get; set; }
+
+        public void GreetAll()
+        {
+            var xxxxx = "";
+        }
     }
 }

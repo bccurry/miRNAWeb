@@ -27,10 +27,9 @@ namespace Web.Controllers
   
         [Route("")]
         [HttpPost]
-        public void ValidateSearchTerms([FromBody]string searchTerms)
+        public dynamic ValidateSearchTerms([FromBody]string searchTerms)
         {
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
+       
 
             char[] delimiters = new char[] { '\r', '\n', ';', ',', '|' };
             string[] searchTermEnumerable = searchTerms.Split(delimiters,
@@ -52,11 +51,9 @@ namespace Web.Controllers
                 Type = x.Type,
                 Value = _searchFactory.ComputeCosineSimilarity(compositeVector.Values, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values)
             }).OrderByDescending(x => x.Value).Take(50);
+            
 
-            stopWatch.Stop();
-            var elapsed = stopWatch.ElapsedMilliseconds/1000;
-
-            var yyyy = "";
+            return results;
         }
 
         [Route("test")]

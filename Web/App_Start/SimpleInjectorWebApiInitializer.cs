@@ -34,17 +34,17 @@ namespace Web.App_Start
         {
             container.Register<IQueryDispatcher, QueryDispatcher>(Lifestyle.Singleton);
             container.Register<ICommandDispatcher, CommandDispatcher>(Lifestyle.Singleton);
-            container.Register<IMessageHub, MessageHub>(Lifestyle.Transient);
-            container.RegisterInitializer<MessageHub>(x =>
-            {
-                x.UpdateProfileRequestAction =
-                    (profileRequestId) =>
-                    {
-                        GlobalHost.ConnectionManager.GetHubContext<MessageHub>()
-                            .Clients.All.showCPSUpdate(profileRequestId);
-                        return true;
-                    };
-            });
+//            container.Register<IMessageHub, MessageHub>(Lifestyle.Singleton);
+//            container.RegisterInitializer<MessageHub>(x =>
+//            {
+//                x.UpdatePercentageFinished =
+//                    (count) =>
+//                    {
+//                        GlobalHost.ConnectionManager.GetHubContext<MessageHub>()
+//                            .Clients.All.percentageFinishedClient(count);
+//                        return true;
+//                    };
+//            });
             container.Register<CosineSimilarity>(Lifestyle.Singleton);
             container.Register<ISearchFactory, SearchFactory>(Lifestyle.Singleton);
             // For instance:

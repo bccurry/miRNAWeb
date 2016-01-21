@@ -1,4 +1,4 @@
-app.controller('mainCtrl', ['$scope', function ($scope) {
-        console.log("brandon");
+app.controller('mainCtrl', ['$scope', 'messageHubSvc', function ($scope, messageHubSvc) {
+        messageHubSvc.connect();
+        //messageHubSvc.sendRequest();
     }]);
-//# sourceMappingURL=MainCtrl.js.map

@@ -15,11 +15,11 @@
   
 
     link = (scope) => {
+        
         scope.compute = () => {
             this.searchSvc.validateSearchTerms(scope.searchList).then((result) => { console.log(result.data) });
         };
-
-        
+    
     }
 }
 

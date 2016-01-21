@@ -13,4 +13,3 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', functio
             controller: 'mainCtrl'
         });
     }]);
-//# sourceMappingURL=app.js.map
