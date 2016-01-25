@@ -17,24 +17,20 @@ namespace Web.Factories
 
         public SearchFactory(CosineSimilarity cs)
         {
-//            _messageHub = messageHub;
-_hubContext =
-                        GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
-                          
+            _hubContext = GlobalHost.ConnectionManager.GetHubContext<MessageHub>();               
             _cs = cs;
         }
 
         public double ComputeCosineSimilarity(double[] compositeVector, double [] comparedVector, int current, int total)
         {
-//            _messageHub.UpdatePercentageFinished(22222);
             var percentageFinished = ComputePercentageFinished(current, total);
             _hubContext.Clients.All.percentageFinishedClient(percentageFinished);
             return _cs.GetSimilarityScore(compositeVector, comparedVector);
         }
 
-        public double ComputePercentageFinished(double current, double total)
+        public int ComputePercentageFinished(double current, double total)
         {
-            return current / total;
+            return (int)(current / (total - 1) * 100);
         }
     }
 }

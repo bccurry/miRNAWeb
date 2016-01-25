@@ -1,19 +1,19 @@
 var MessageHubSvc = (function () {
-    function MessageHubSvc($, $rootScope) {
+    function MessageHubSvc($, $rootScope, $timeout) {
         this.$ = $;
         this.$rootScope = $rootScope;
+        this.$timeout = $timeout;
     }
     MessageHubSvc.prototype.connect = function () {
+        var innerThis = this;
         this.connection = this.$.hubConnection();
         this.proxy = this.connection.createHubProxy('messageHub');
-        var innerThis = this;
         this.connection.start().done(function () {
             console.log(innerThis.isConnected());
         }).fail(function (error) {
             console.log('Invocation of start failed. Error: ' + error);
         });
         this.proxy.on('percentageFinishedClient', function (percentageFinished) {
-            console.log("BRANDON " + percentageFinished);
             innerThis.$rootScope.$broadcast('percentageFinishedClient', percentageFinished);
         });
     };
@@ -32,9 +32,9 @@ var MessageHubSvc = (function () {
     };
     return MessageHubSvc;
 })();
-app.service('messageHubSvc', ['$', '$rootScope',
-    function ($, $rootScope) {
-        return new MessageHubSvc($, $rootScope);
+app.service('messageHubSvc', ['$', '$rootScope', '$timeout',
+    function ($, $rootScope, $timeout) {
+        return new MessageHubSvc($, $rootScope, $timeout);
     }
 ]);
 //# sourceMappingURL=MessageHubSvc.js.map

@@ -1,7 +1,19 @@
-﻿<div class="container wow fadeIn animated">
+﻿<div id="results" class="container wow fadeIn animated">
     <h1>Results</h1>
-    <h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam scelerisque faucibus risus non iaculis. Fusce a augue ante, pellentesque pretium erat. Fusce in turpis in velit tempor pretium. Integer a leo libero.</h2>
-
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="result in resultList">
+                <td>{{result.Name}}</td>
+                <td>{{result.Value}}</td>
+            </tr>
+        </tbody>   
+    </table>
 </div><!-- /container -->
 <div class="container">
     <div class="row">

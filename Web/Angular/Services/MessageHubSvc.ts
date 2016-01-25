@@ -11,29 +11,28 @@ class MessageHubSvc implements IMessageHubSvc {
     private $rootScope;
     private connection;
     private proxy;
+    private $timeout;
 
-    constructor($, $rootScope) {
+    constructor($, $rootScope, $timeout) {
         this.$ = $;
         this.$rootScope = $rootScope;
+        this.$timeout = $timeout;
     }
 
     connect() {
-
+        var innerThis = this;
         this.connection = this.$.hubConnection();
         this.proxy = this.connection.createHubProxy('messageHub');
-        var innerThis = this;
-
-        this.connection.start().done(() => {
+ 
+        this.connection.start().done(() => {  
             console.log(innerThis.isConnected());
         }).fail((error) => {
             console.log('Invocation of start failed. Error: ' + error);
         });
 
         this.proxy.on('percentageFinishedClient', (percentageFinished: number) => {
-            console.log("BRANDON " + percentageFinished);
             innerThis.$rootScope.$broadcast('percentageFinishedClient', percentageFinished);
         });
-
     }
 
     isConnecting() {
@@ -54,8 +53,8 @@ class MessageHubSvc implements IMessageHubSvc {
 }
 }
 
-app.service('messageHubSvc', ['$', '$rootScope',
-    ($, $rootScope) => {
-        return new MessageHubSvc($, $rootScope);
+app.service('messageHubSvc', ['$', '$rootScope', '$timeout',
+    ($, $rootScope, $timeout) => {
+        return new MessageHubSvc($, $rootScope, $timeout);
     }
 ]); 

@@ -1,33 +1,43 @@
 ﻿class SearchSection implements angular.IDirective {
     private searchSvc: ISearchSvc;
-    private messageHubSvc: IMessageHubSvc;
-    constructor(searchSvc, messageHubSvc) {
+    private $timeout;
+
+    constructor(searchSvc, $timeout) {
         this.searchSvc = searchSvc;
-        this.messageHubSvc = messageHubSvc;
+        this.$timeout = $timeout;
     }
 
-    restrict = 'E'; //E = element, A = attribute, C = class, M = comment         
+    restrict = 'E'; //E = element, A = attribute, C = class, M = comment  
+           
     scope = {
         //@ reads the attribute value, = provides two-way binding, & works with functions
-        searchList: '='
+        resultList: '=',
+        percentageFinished: '='
     };
+
     templateUrl = 'Angular/Templates/SearchSection.html';
 
-  
-
     link = (scope) => {
-        //this.messageHubSvc.connect();
-        
         scope.compute = () => {
-            //console.log(this.messageHubSvc.isConnected());
-            this.searchSvc.test2().then((result) => {});
-            //this.searchSvc.validateSearchTerms(scope.searchList).then((result) => { console.log(result.data) });
+            scope.isProcessing = true;
+            this.searchSvc.validateSearchTerms(scope.searchList).then((result) => {
+                scope.resultList = result.data;
+            });
         };
+
+        scope.$watch('percentageFinished', (newVal, oldVal) => {
+            console.log(newVal);
+            if (!(newVal === oldVal)) {
+                //this.$timeout(() => {
+                    scope.resultBarPercentage = { "width": newVal + '%' };
+                //}, 500);        
+            }
+        });
     
     }
 }
 
-app.directive('searchSection', ['searchSvc', 'messageHubSvc', (searchSvc, messageHubSvc) => { return new SearchSection(searchSvc, messageHubSvc); }]);
+app.directive('searchSection', ['searchSvc', '$timeout', (searchSvc, $timeout) => { return new SearchSection(searchSvc, $timeout); }]);
  
 
 

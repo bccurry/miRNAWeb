@@ -17,7 +17,7 @@
 
 
 <div class="container">
-    <div class="intro-well wow animated bounceIn">
+    <div ng-hide="isProcessing" class="intro-well wow animated bounceIn">
         <div class="col-md-12">
             <h1>MicroRNA and Term Association Database Tool</h1>
             <h2>Enter search term or delimited list of search terms below...</h2>
@@ -25,6 +25,16 @@
                 <textarea ng-model="searchList"></textarea>
                 <a class="btn btn-primary compute-btn" ng-click="compute()"><li class="fa fa-gg fa-lg"></li>&nbsp;&nbsp;Compute</a>
                 <a class="btn btn-primary clear-btn"><li class="fa fa-trash-o fa-lg"></li>&nbsp;&nbsp;Clear</a>
+            </div>
+        </div>
+    </div>
+    <div ng-show="isProcessing" class="intro-well wow animated bounceIn">
+        <div class="col-md-12">
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="{{percentageFinished}}" aria-valuemin="0" aria-valuemax="100" ng-style="resultBarPercentage">
+                    <span class="sr-only">{{percentageFinished}}% Complete</span> 
+                    {{percentageFinished}}%
+                </div>
             </div>
         </div>
     </div>

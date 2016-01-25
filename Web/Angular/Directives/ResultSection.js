@@ -1,22 +1,22 @@
 var ResultSection = (function () {
-    function ResultSection(messageHubSvc) {
+    function ResultSection() {
         this.restrict = 'E'; //E = element, A = attribute, C = class, M = comment         
-        this.scope = {};
+        this.scope = {
+            //@ reads the attribute value, = provides two-way binding, & works with functions
+            resultList: '=',
+            percentageFinished: '='
+        };
         this.templateUrl = 'Angular/Templates/ResultSection.html';
         this.link = function (scope) {
-            //        console.log("RESULT");
-            //        this.messageHubSvc.connect();
-            //        $scope.$on('newRequestMessageClient', (event, isNewRequests: boolean) => {
-            //            $scope.newRequests.anyNew = isNewRequests;
-            //            $scope.$apply();
+            //        scope.$watch('percentageFinished', (newVal, oldVal) => {
+            //            console.log(newVal);
+            //            if (!(newVal === oldVal)) {
+            //                scope.resultBarPercentage = { "width": newVal + '%' };
+            //            }
             //        });
-            //        scope.compute = () => {
-            //            this.searchSvc.validateSearchTerms(scope.searchList).then((result) => { console.log(result.data) });
-            //        };
         };
-        this.messageHubSvc = messageHubSvc;
     }
     return ResultSection;
 })();
-app.directive('resultSection', ['messageHubSvc', function (messageHubSvc) { return new ResultSection(messageHubSvc); }]);
+app.directive('resultSection', [function () { return new ResultSection(); }]);
 //# sourceMappingURL=ResultSection.js.map

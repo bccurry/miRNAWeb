@@ -31,8 +31,6 @@ namespace Web.Controllers
         [HttpPost]
         public dynamic ValidateSearchTerms([FromBody]string searchTerms)
         {
-       
-
             char[] delimiters = new char[] { '\r', '\n', ';', ',', '|' };
             string[] searchTermEnumerable = searchTerms.Split(delimiters,
                      StringSplitOptions.RemoveEmptyEntries);
@@ -47,14 +45,13 @@ namespace Web.Controllers
             // Get all mirna Vector Ids
             var mirnaVectorIds = _qry.Dispatch(new AllVectorMetaDataQuery());
             var mirnaVectorCount = mirnaVectorIds.Count();
-            var results = mirnaVectorIds.AsParallel().Select((x, idx) => new
+            var results = mirnaVectorIds.Select((x, idx) => new
             {
                 Name = x.Name,
                 Type = x.Type,
                 Value = _searchFactory.ComputeCosineSimilarity(compositeVector.Values, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx, mirnaVectorCount)
             }).OrderByDescending(x => x.Value).Take(50);
             
-
             return results;
         }
 
@@ -90,14 +87,6 @@ namespace Web.Controllers
             var elapsed = stopWatch.ElapsedMilliseconds / 1000;
 
             return results;
-        }
-
-        [Route("test2")]
-        [HttpGet]
-        public string Test2()
-        {
-            _hubContext.Clients.All.percentageFinishedClient("23");
-            return "hry";
         }
     }
 }
