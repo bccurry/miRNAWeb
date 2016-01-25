@@ -7,14 +7,15 @@ var MessageHubSvc = (function () {
     MessageHubSvc.prototype.connect = function () {
         var innerThis = this;
         this.connection = this.$.hubConnection();
+        this.connection.logging = true;
         this.proxy = this.connection.createHubProxy('messageHub');
+        this.proxy.on('percentageFinishedClient', function (percentageFinished) {
+            innerThis.$rootScope.$broadcast('percentageFinishedClient', percentageFinished);
+        });
         this.connection.start().done(function () {
             console.log(innerThis.isConnected());
         }).fail(function (error) {
             console.log('Invocation of start failed. Error: ' + error);
-        });
-        this.proxy.on('percentageFinishedClient', function (percentageFinished) {
-            innerThis.$rootScope.$broadcast('percentageFinishedClient', percentageFinished);
         });
     };
     MessageHubSvc.prototype.isConnecting = function () {
