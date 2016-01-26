@@ -154,12 +154,12 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffebebeb', endColorstr='#fff5f5f5', GradientType=0);
   background-repeat: repeat-x;
 }
-.progress-bar {
+/*.progress-bar {
   background-image: -webkit-linear-gradient(top, #428bca 0%, #3071a9 100%);
   background-image:         linear-gradient(to bottom, #428bca 0%, #3071a9 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff428bca', endColorstr='#ff3071a9', GradientType=0);
   background-repeat: repeat-x;
-}
+}*/
 .progress-bar-success {
   background-image: -webkit-linear-gradient(top, #5cb85c 0%, #449d44 100%);
   background-image:         linear-gradient(to bottom, #5cb85c 0%, #449d44 100%);
