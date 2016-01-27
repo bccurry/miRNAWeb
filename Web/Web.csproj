@@ -177,10 +177,15 @@
     <Content Include="Content\owl.carousel.css" />
     <Content Include="Content\owl.theme.css" />
     <Content Include="Content\style.css" />
+    <Content Include="Content\ui-grid.css" />
+    <Content Include="Content\ui-grid.min.css" />
+    <Content Include="Content\ui-grid.svg" />
     <Content Include="Fonts\fontawesome-webfont-v=4.4.0.svg" />
     <Content Include="Fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="gulpfile.js" />
+    <Content Include="Images\background.png" />
+    <Content Include="Images\bg.png" />
     <Content Include="Images\client-pic1.jpg" />
     <Content Include="Images\client-pic2.jpg" />
     <Content Include="Images\i1.png" />
@@ -206,6 +211,9 @@
     <Content Include="Scripts\Angular\angular-ui-router.js" />
     <Content Include="Scripts\Angular\angular-ui-router.min.js" />
     <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Content\ui-grid.woff" />
+    <Content Include="Content\ui-grid.ttf" />
+    <Content Include="Content\ui-grid.eot" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
@@ -214,6 +222,8 @@
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\nivo-lightbox.min.js" />
     <Content Include="Scripts\owl.carousel.min.js" />
+    <Content Include="Scripts\ui-grid.js" />
+    <Content Include="Scripts\ui-grid.min.js" />
     <Content Include="Scripts\wow.min.js" />
     <Content Include="Scripts\Angular\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\Angular\ai.0.15.0-build58334.min.js" />
@@ -1071,6 +1081,7 @@
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\es6-promise\es6-promise.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\ui-grid\ui-grid.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

@@ -1,4 +1,4 @@
-﻿var app = angular.module('mirnaApp', ['ui.router']);
+﻿var app = angular.module('mirnaApp', ['ui.router', 'ui.grid', 'ui.grid.infiniteScroll']);
 app.value('$', $);
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', ($stateProvider, $urlRouterProvider, $locationProvider) => {
     $locationProvider.html5Mode({
