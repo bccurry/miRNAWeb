@@ -14,6 +14,8 @@ namespace Web.Factories
     {
         double ComputeCosineSimilarity(double[] compositeVector, double[] comparedVector, int index, int total);
         double[] ComputeCompositeVector(IEnumerable<VectorMetaData> searchEnumerable);
+        IEnumerable<ResultTerm> ComputeMirnaResultTerms(double[] compositeVector);
+        IEnumerable<ResultTerm> ComputeMirnaAndTermResultTerms(double[] compositeVector);
     }
 
     public class SearchFactory: ISearchFactory
@@ -44,6 +46,23 @@ namespace Web.Factories
             compositeVector = searchEnumerable.Select(searchTerm => _qry.Dispatch(new VectorByNameAndTypeQuery(searchTerm.Name, searchTerm.Type)).Values)
                 .Aggregate(compositeVector, (current, searchVector) => current.Zip(searchVector, (x, y) => x + y).ToArray());
             return compositeVector;
+        }
+
+        public IEnumerable<ResultTerm> ComputeMirnaResultTerms(double[] compositeVector)
+        {
+            var mirnaVectorIds = _qry.Dispatch(new AllVectorMetaDataQuery()).ToArray();
+            var mirnaVectorCount = mirnaVectorIds.Count();
+            return mirnaVectorIds.Select((x, idx) => new ResultTerm
+            {
+                Name = x.Name,
+                Type = x.Type,
+                Value = ComputeCosineSimilarity(compositeVector, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx, mirnaVectorCount)
+            }).OrderByDescending(x => x.Value).Take(50);
+        }
+
+        public IEnumerable<ResultTerm> ComputeMirnaAndTermResultTerms(double[] compositeVector)
+        {
+            throw new NotImplementedException();
         }
     }
 }

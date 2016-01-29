@@ -11,7 +11,7 @@ var SearchSection = (function () {
         this.link = function (scope) {
             scope.compute = function () {
                 scope.isProcessing = true;
-                _this.searchSvc.validateSearchTerms(scope.searchList).then(function (result) {
+                _this.searchSvc.processSearchRequest(scope.searchList).then(function (result) {
                     scope.resultList = result.data;
                 });
             };
@@ -29,4 +29,3 @@ var SearchSection = (function () {
     return SearchSection;
 })();
 app.directive('searchSection', ['searchSvc', '$timeout', function (searchSvc, $timeout) { return new SearchSection(searchSvc, $timeout); }]);
-//# sourceMappingURL=SearchSection.js.map

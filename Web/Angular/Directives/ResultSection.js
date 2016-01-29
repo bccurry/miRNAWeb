@@ -19,4 +19,3 @@ var ResultSection = (function () {
     return ResultSection;
 })();
 app.directive('resultSection', [function () { return new ResultSection(); }]);
-//# sourceMappingURL=ResultSection.js.map

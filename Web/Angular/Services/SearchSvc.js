@@ -3,12 +3,11 @@ var SearchSvc = (function () {
         this.$http = $http;
         this.$q = $q;
     }
-    SearchSvc.prototype.validateSearchTerms = function (searchList) {
-        console.log(searchList);
+    SearchSvc.prototype.processSearchRequest = function (delimitedSearchTerms) {
+        var request = { DelimitedSearchTerms: delimitedSearchTerms, IsMirnaAndTermSearch: false };
         var url = 'api/search';
-        return this.$http.post(url, JSON.stringify(searchList));
+        return this.$http.post(url, request);
     };
     return SearchSvc;
 })();
 app.service('searchSvc', ['$http', '$q', function ($http, $q) { return new SearchSvc($http, $q); }]);
-//# sourceMappingURL=SearchSvc.js.map

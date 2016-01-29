@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Http;
 using Data.Dispatchers;
 using Data.Queries;
 using AForge.Math.Metrics;
+using Data.Models;
 using Microsoft.AspNet.SignalR;
 using Web.Factories;
 using Web.Hubs;
@@ -29,39 +31,14 @@ namespace Web.Controllers
   
         [Route("")]
         [HttpPost]
-        public dynamic ValidateSearchTerms([FromBody]string searchTerms)
-        {
-            double[] compositeVector = null;
-            char[] delimiters = new char[] { '\r', '\n', ';', ',', '|' };
-            string[] searchTermEnumerable = searchTerms.Split(delimiters,
-                     StringSplitOptions.RemoveEmptyEntries);
-
-            // Assuming only searching for one term at a time right now
-            // Also validation step
-            var validatedVectorMetaDataEnumerable = searchTermEnumerable.Select(x => _qry.Dispatch(new ValidateSearchTermQuery(x)));
-
-            if (validatedVectorMetaDataEnumerable.Count() == 1)
-            {
-                var compositeVectorMetaData = validatedVectorMetaDataEnumerable.Single();
-                compositeVector =
-                    _qry.Dispatch(new VectorByNameAndTypeQuery(compositeVectorMetaData.Name, compositeVectorMetaData.Type)).Values;
-            }
-            else
-            {
-                compositeVector = _searchFactory.ComputeCompositeVector(validatedVectorMetaDataEnumerable);
-            }       
-
-            // Get all mirna Vector Ids
-            var mirnaVectorIds = _qry.Dispatch(new AllVectorMetaDataQuery());
-            var mirnaVectorCount = mirnaVectorIds.Count();
-            var results = mirnaVectorIds.Select((x, idx) => new
-            {
-                Name = x.Name,
-                Type = x.Type,
-                Value = _searchFactory.ComputeCosineSimilarity(compositeVector, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx, mirnaVectorCount)
-            }).OrderByDescending(x => x.Value).Take(50);
-            
-            return results;
+        public IEnumerable<ResultTerm> ProcessSearchRequest(SearchRequest request)
+        {     
+            var delimiters = new char[] { '\r', '\n', ';', ',', '|' };
+            var searchTermEnumerable = request.DelimitedSearchTerms.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            var validatedVectorMetaDataArray = searchTermEnumerable.Select(x => _qry.Dispatch(new ValidateSearchTermQuery(x))).ToArray();
+            var compositeVector = _searchFactory.ComputeCompositeVector(validatedVectorMetaDataArray);
+            return request.IsMirnaAndTermSearch ? _searchFactory.ComputeMirnaAndTermResultTerms(compositeVector) :
+                _searchFactory.ComputeMirnaResultTerms(compositeVector);
         }
 
         [Route("test")]

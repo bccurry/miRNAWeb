@@ -54,6 +54,8 @@
     <Compile Include="Dispatchers\ICommandDispatcher.cs" />
     <Compile Include="Dispatchers\IQueryDispatcher.cs" />
     <Compile Include="Gateways\MirnaGateway.cs" />
+    <Compile Include="Models\ResultTerm.cs" />
+    <Compile Include="Models\SearchRequest.cs" />
     <Compile Include="Models\Vector.cs" />
     <Compile Include="Models\VectorMetaData.cs" />
     <Compile Include="Program.cs" />

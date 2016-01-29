@@ -20,7 +20,7 @@
     link = (scope) => {
         scope.compute = () => {
             scope.isProcessing = true;
-            this.searchSvc.validateSearchTerms(scope.searchList).then((result) => {
+            this.searchSvc.processSearchRequest(scope.searchList).then((result) => {
                 scope.resultList = result.data;
             });
         };
