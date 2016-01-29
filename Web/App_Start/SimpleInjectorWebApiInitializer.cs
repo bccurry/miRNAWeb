@@ -32,7 +32,7 @@ namespace Web.App_Start
      
         private static void InitializeContainer(Container container)
         {
-            container.Register<IQueryDispatcher, QueryDispatcher>(Lifestyle.Singleton);
+            container.Register<IQueryDispatcher, QueryDispatcher>(Lifestyle.Transient);
             container.Register<ICommandDispatcher, CommandDispatcher>(Lifestyle.Singleton);
 //            container.Register<IMessageHub, MessageHub>(Lifestyle.Singleton);
 //            container.RegisterInitializer<MessageHub>(x =>
@@ -46,7 +46,7 @@ namespace Web.App_Start
 //                    };
 //            });
             container.Register<CosineSimilarity>(Lifestyle.Singleton);
-            container.Register<ISearchFactory, SearchFactory>(Lifestyle.Singleton);
+            container.Register<ISearchFactory, SearchFactory>(Lifestyle.Transient);
             // For instance:
             // container.Register<IUserRepository, SqlUserRepository>(Lifestyle.Scoped);
         }
