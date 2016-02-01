@@ -9,12 +9,26 @@
 
     .compute-btn {
         float:left;
-        width: 49.75%;
+        /*width: 33%;*/
+        width: 100%;
+        /*margin-right: 4.5px;*/
     }
 
     .clear-btn {
-        float:right;
-        width: 49.75%;
+        float:left;
+        width: 100%;
+        /*width: 33%;*/
+    }
+
+    .margin-right-5 {
+        margin-right: .5%;
+    }
+
+    .col-md-4 {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        width: 33% !important;
+
     }
 
     _:-ms-lang(x), .compute-btn {
@@ -52,9 +66,16 @@
             <h2>Enter search term or delimited list of search terms below...</h2>
             <div class=".col-md-8">
                 <textarea ng-model="searchList"></textarea>
-                <a class="btn btn-primary compute-btn" ng-click="compute()"><li class="fa fa-gg fa-lg"></li>&nbsp;&nbsp;Compute</a>
-                <a class="btn btn-primary clear-btn"><li class="fa fa-trash-o fa-lg"></li>&nbsp;&nbsp;Clear</a>
             </div>
+                <div class="col-md-4 margin-right-5">
+                    <a class="btn btn-primary compute-btn" ng-click="compute(false)"><li class="fa fa-gg fa-lg"></li>&nbsp;&nbsp;Compute miRNA</a>
+                </div>
+                <div class="col-md-4 margin-right-5">
+                    <a class="btn btn-primary compute-btn" ng-click="compute(true)"><li class="fa fa-gg fa-lg"></li>&nbsp;&nbsp;Compute miRNA &amp; term</a>
+                </div>
+                <div class="col-md-4">
+                    <a class="btn btn-primary clear-btn"><li class="fa fa-trash-o fa-lg"></li>&nbsp;&nbsp;Clear</a>
+                </div>
         </div>
     </div>
     <div ng-show="isProcessing" class="intro-well wow animated bounceIn">

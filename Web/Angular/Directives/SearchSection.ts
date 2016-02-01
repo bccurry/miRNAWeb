@@ -18,10 +18,11 @@
     templateUrl = 'Angular/Templates/SearchSection.html';
 
     link = (scope) => {
-        scope.compute = () => {
+        scope.compute = (isMirnaAndTermSearch: boolean) => {
             scope.isProcessing = true;
-            this.searchSvc.processSearchRequest(scope.searchList).then((result) => {
-                scope.resultList = result.data;
+            this.searchSvc.processSearchRequest(scope.searchList, isMirnaAndTermSearch).then((result) => {
+                console.log(result.data);
+                scope.resultList =  result.data.MirnaResultTerms;
             });
         };
 

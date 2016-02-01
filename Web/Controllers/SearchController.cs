@@ -31,48 +31,15 @@ namespace Web.Controllers
   
         [Route("")]
         [HttpPost]
-        public IEnumerable<ResultTerm> ProcessSearchRequest(SearchRequest request)
+        public SearchResult ProcessSearchRequest(SearchRequest request)
         {     
             var delimiters = new char[] { '\r', '\n', ';', ',', '|' };
             var searchTermEnumerable = request.DelimitedSearchTerms.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
             var validatedVectorMetaDataArray = searchTermEnumerable.Select(x => _qry.Dispatch(new ValidateSearchTermQuery(x))).ToArray();
             var compositeVector = _searchFactory.ComputeCompositeVector(validatedVectorMetaDataArray);
-            return request.IsMirnaAndTermSearch ? _searchFactory.ComputeMirnaAndTermResultTerms(compositeVector) :
-                _searchFactory.ComputeMirnaResultTerms(compositeVector);
+            return request.IsMirnaAndTermSearch ? _searchFactory.ComputeMirnaAndTermResultTerms(compositeVector) 
+                : _searchFactory.ComputeMirnaResultTerms(compositeVector);
         }
 
-        [Route("test")]
-        [HttpGet]
-        public dynamic Test()
-        {
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-            var searchTerms = "cancer";
-            char[] delimiters = new char[] { '\r', '\n', ';', ',', '|' };
-            string[] searchTermEnumerable = searchTerms.Split(delimiters,
-                     StringSplitOptions.RemoveEmptyEntries);
-
-            // Assuming only searching for one term at a time right now
-            // Also validation step
-            var validatedVectorMetaDataEnumerable = searchTermEnumerable.Select(x => _qry.Dispatch(new ValidateSearchTermQuery(x)));
-            var compositeVectorMetaData = validatedVectorMetaDataEnumerable.Single();
-            var compositeVector =
-                _qry.Dispatch(new VectorByNameAndTypeQuery(compositeVectorMetaData.Name, compositeVectorMetaData.Type));
-
-            // Get all mirna Vector Ids
-            var mirnaVectorIds = _qry.Dispatch(new AllVectorMetaDataQuery());
-            var mirnaVectorCount = mirnaVectorIds.Count();
-            var results = mirnaVectorIds.AsParallel().Select((x, idx) => new
-            {
-                Name = x.Name,
-                Type = x.Type,
-                Value = _searchFactory.ComputeCosineSimilarity(compositeVector.Values, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx, mirnaVectorCount)
-            }).OrderByDescending(x => x.Value).Take(50);
-
-            stopWatch.Stop();
-            var elapsed = stopWatch.ElapsedMilliseconds / 1000;
-
-            return results;
-        }
     }
 }

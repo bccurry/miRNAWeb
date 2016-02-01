@@ -14,11 +14,11 @@ namespace Web.Factories
     {
         double ComputeCosineSimilarity(double[] compositeVector, double[] comparedVector, int index, int total);
         double[] ComputeCompositeVector(IEnumerable<VectorMetaData> searchEnumerable);
-        IEnumerable<ResultTerm> ComputeMirnaResultTerms(double[] compositeVector);
-        IEnumerable<ResultTerm> ComputeMirnaAndTermResultTerms(double[] compositeVector);
+        SearchResult ComputeMirnaResultTerms(double[] compositeVector);
+        SearchResult ComputeMirnaAndTermResultTerms(double[] compositeVector);
     }
 
-    public class SearchFactory: ISearchFactory
+    public class SearchFactory : ISearchFactory
     {
         private readonly IQueryDispatcher _qry;
         private readonly IHubContext _hubContext;
@@ -27,42 +27,75 @@ namespace Web.Factories
         public SearchFactory(CosineSimilarity cs, QueryDispatcher qry)
         {
             _qry = qry;
-            _hubContext = GlobalHost.ConnectionManager.GetHubContext<MessageHub>();               
+            _hubContext = GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
             _cs = cs;
         }
-        public double ComputeCosineSimilarity(double[] compositeVector, double [] comparedVector, int current, int total)
+
+        public double ComputeCosineSimilarity(double[] compositeVector, double[] comparedVector, int current, int total)
         {
             var percentageFinished = ComputePercentageFinished(current, total);
             _hubContext.Clients.All.percentageFinishedClient(percentageFinished);
             return _cs.GetSimilarityScore(compositeVector, comparedVector);
         }
+
         private int ComputePercentageFinished(double current, double total)
         {
-            return (int)(current / (total - 1) * 100);
+            return (int) (current/(total - 1)*100);
         }
+
         public double[] ComputeCompositeVector(IEnumerable<VectorMetaData> searchEnumerable)
         {
             var compositeVector = new double[449];
-            compositeVector = searchEnumerable.Select(searchTerm => _qry.Dispatch(new VectorByNameAndTypeQuery(searchTerm.Name, searchTerm.Type)).Values)
-                .Aggregate(compositeVector, (current, searchVector) => current.Zip(searchVector, (x, y) => x + y).ToArray());
+            compositeVector = searchEnumerable.Select(
+                searchTerm => _qry.Dispatch(new VectorByNameAndTypeQuery(searchTerm.Name, searchTerm.Type)).Values)
+                .Aggregate(compositeVector,
+                    (current, searchVector) => current.Zip(searchVector, (x, y) => x + y).ToArray());
             return compositeVector;
         }
 
-        public IEnumerable<ResultTerm> ComputeMirnaResultTerms(double[] compositeVector)
+        public SearchResult ComputeMirnaResultTerms(double[] compositeVector)
         {
-            var mirnaVectorIds = _qry.Dispatch(new AllVectorMetaDataQuery()).ToArray();
+            var mirnaVectorIds = _qry.Dispatch(new AllVectorMetaDataQuery(false)).ToArray();
             var mirnaVectorCount = mirnaVectorIds.Count();
-            return mirnaVectorIds.Select((x, idx) => new ResultTerm
-            {
-                Name = x.Name,
-                Type = x.Type,
-                Value = ComputeCosineSimilarity(compositeVector, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx, mirnaVectorCount)
-            }).OrderByDescending(x => x.Value).Take(50);
+            return new SearchResult {
+                MirnaResultTerms = mirnaVectorIds.Select((x, idx) => new ResultTerm
+                {
+                    Name = x.Name,
+                    Type = x.Type,
+                    Value =
+                        ComputeCosineSimilarity(compositeVector,
+                            _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx, mirnaVectorCount)
+                }).OrderByDescending(x => x.Value).Take(50)
+            };  
         }
 
-        public IEnumerable<ResultTerm> ComputeMirnaAndTermResultTerms(double[] compositeVector)
+        public SearchResult ComputeMirnaAndTermResultTerms(double[] compositeVector)
         {
-            throw new NotImplementedException();
+            var mirnaVectorIds = _qry.Dispatch(new AllVectorMetaDataQuery(false)).ToArray();
+            var termVectorIds = _qry.Dispatch(new AllVectorMetaDataQuery(true)).ToArray();
+            var totalVectorIdsCount = mirnaVectorIds.Count() + termVectorIds.Count();
+
+            var result = new SearchResult
+            {
+                MirnaResultTerms = mirnaVectorIds.Select((x, idx) => new ResultTerm
+                {
+                    Name = x.Name,
+                    Type = x.Type,
+                    Value =
+                        ComputeCosineSimilarity(compositeVector,
+                            _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx, totalVectorIdsCount)
+                }).OrderByDescending(x => x.Value).Take(50),
+
+                TermResultTerms = termVectorIds.Select((x, idx) => new ResultTerm
+                {
+                    Name = x.Name,
+                    Type = x.Type,
+                    Value = ComputeCosineSimilarity(compositeVector, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx + mirnaVectorIds.Count(), totalVectorIdsCount)
+                }).OrderByDescending(x => x.Value).Take(300)
+            };
+
+            return result;
         }
+
     }
 }

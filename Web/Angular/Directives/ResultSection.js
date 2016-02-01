@@ -8,6 +8,11 @@ var ResultSection = (function () {
         };
         this.templateUrl = 'Angular/Templates/ResultSection.html';
         this.link = function (scope) {
+            scope.gridOptions = {};
+            scope.gridOptions.data = 'resultList';
+            scope.gridOptions.columnDefs = [
+                { name: 'Name' }
+            ];
             //        scope.$watch('percentageFinished', (newVal, oldVal) => {
             //            console.log(newVal);
             //            if (!(newVal === oldVal)) {
@@ -19,3 +24,4 @@ var ResultSection = (function () {
     return ResultSection;
 })();
 app.directive('resultSection', [function () { return new ResultSection(); }]);
+//# sourceMappingURL=ResultSection.js.map

@@ -1,5 +1,5 @@
 ﻿interface ISearchSvc {
-    processSearchRequest(searchList: string);
+    processSearchRequest(delimitedSearchTerms: string, isMirnaAndTermSearch: boolean);
 }
 
 class SearchSvc implements ISearchSvc {
@@ -11,8 +11,8 @@ class SearchSvc implements ISearchSvc {
         this.$q = $q;
     }
 
-    processSearchRequest(delimitedSearchTerms: string) {
-        var request = { DelimitedSearchTerms: delimitedSearchTerms, IsMirnaAndTermSearch: false }
+    processSearchRequest(delimitedSearchTerms: string, isMirnaAndTermSearch: boolean) {
+        var request = { DelimitedSearchTerms: delimitedSearchTerms, IsMirnaAndTermSearch: isMirnaAndTermSearch };
         var url = 'api/search';
         return this.$http.post(url, request);
     }

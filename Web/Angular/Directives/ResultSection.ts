@@ -10,6 +10,11 @@
     templateUrl = 'Angular/Templates/ResultSection.html';
 
     link = (scope) => {
+        scope.gridOptions = {};
+        scope.gridOptions.data = 'resultList';
+        scope.gridOptions.columnDefs = [
+            { name: 'Name' }
+        ];
 //        scope.$watch('percentageFinished', (newVal, oldVal) => {
 //            console.log(newVal);
 //            if (!(newVal === oldVal)) {
