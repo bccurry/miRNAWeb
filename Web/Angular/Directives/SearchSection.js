@@ -13,7 +13,7 @@ var SearchSection = (function () {
                 scope.isProcessing = true;
                 _this.searchSvc.processSearchRequest(scope.searchList, isMirnaAndTermSearch).then(function (result) {
                     console.log(result.data);
-                    scope.resultList = result.data.MirnaResultTerms;
+                    scope.resultList = result.data;
                 });
             };
             scope.$watch('percentageFinished', function (newVal, oldVal) {
@@ -30,4 +30,3 @@ var SearchSection = (function () {
     return SearchSection;
 })();
 app.directive('searchSection', ['searchSvc', '$timeout', function (searchSvc, $timeout) { return new SearchSection(searchSvc, $timeout); }]);
-//# sourceMappingURL=SearchSection.js.map

@@ -22,7 +22,7 @@
             scope.isProcessing = true;
             this.searchSvc.processSearchRequest(scope.searchList, isMirnaAndTermSearch).then((result) => {
                 console.log(result.data);
-                scope.resultList =  result.data.MirnaResultTerms;
+                scope.resultList =  result.data;
             });
         };
 

@@ -11,5 +11,6 @@ namespace Data.Models
         public string Name { get; set; }
         public string Type { get; set; }
         public double Value { get; set; }
+        public bool IsActive { get; set; }
     }
 }

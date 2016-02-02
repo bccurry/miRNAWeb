@@ -22,11 +22,11 @@
 <div class="container">
     <div class="row">
         <div class="col-md-5 result-block wow fadeInLeft animated" style="float: left" data-wow-delay="0.1s">
-            <div class="col-md-6">
-                <div ng-if="resultList" ui-grid="gridOptions" class="grid" ui-grid-infinite-scroll></div>
+            <div ng-class="gridClass">
+                <div ng-if="resultList.MirnaResultTerms" ui-grid="gridOptionsMirna" class="grid" ui-grid-infinite-scroll></div>
             </div>
             <div class="col-md-6">
-                <div ng-if="resultList" ui-grid="gridOptions" class="grid" ui-grid-infinite-scroll></div>
+                <div ng-if="resultList.TermResultTerms" ui-grid="gridOptionsTerm" class="grid" ui-grid-infinite-scroll></div>
             </div>
            
             

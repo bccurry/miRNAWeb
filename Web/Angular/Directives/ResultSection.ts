@@ -10,17 +10,28 @@
     templateUrl = 'Angular/Templates/ResultSection.html';
 
     link = (scope) => {
-        scope.gridOptions = {};
-        scope.gridOptions.data = 'resultList';
-        scope.gridOptions.columnDefs = [
-            { name: 'Name' }
+
+        scope.$watch("resultList.TermResultTerms", (newVal) => {
+            if (newVal) {
+                scope.gridClass = "col-md-6";
+            }
+        }, true);
+
+        scope.gridClass = "";
+        scope.gridOptionsMirna = {};
+        scope.gridOptionsMirna.data = 'resultList.MirnaResultTerms';
+        scope.gridOptionsMirna.columnDefs = [
+            { name: 'Name', displayName: 'MiRNA' },
+            { name: 'IsActive', displayName: 'Active', type: 'boolean', cellTemplate: '<input type="checkbox" ng-model="row.entity.IsActive">' }
         ];
-//        scope.$watch('percentageFinished', (newVal, oldVal) => {
-//            console.log(newVal);
-//            if (!(newVal === oldVal)) {
-//                scope.resultBarPercentage = { "width": newVal + '%' };
-//            }
-//        });
+
+        scope.gridOptionsTerm = {};
+        scope.gridOptionsTerm.data = 'resultList.TermResultTerms';
+        scope.gridOptionsTerm.columnDefs = [
+            { name: 'Name', displayName: 'Term' },
+            { name: 'ISActive', displayName: 'Active', type: 'boolean', cellTemplate: '<input type="checkbox" ng-model="">' }
+        ];
+
     }
 }
 
