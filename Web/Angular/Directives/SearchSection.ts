@@ -23,6 +23,11 @@
             this.searchSvc.processSearchRequest(scope.searchList, isMirnaAndTermSearch).then((result) => {
                 console.log(result.data);
                 scope.resultList =  result.data;
+            },
+            (errorResult) => {
+                console.log(errorResult);
+                console.log(errorResult.data);
+                console.log(errorResult.status);
             });
         };
 

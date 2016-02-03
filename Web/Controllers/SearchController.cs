@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using Data.Dispatchers;
 using Data.Queries;
@@ -32,10 +34,24 @@ namespace Web.Controllers
         [Route("")]
         [HttpPost]
         public SearchResult ProcessSearchRequest(SearchRequest request)
-        {     
+        {
+            
             var delimiters = new char[] { '\r', '\n', ';', ',', '|' };
             var searchTermEnumerable = request.DelimitedSearchTerms.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
             var validatedVectorMetaDataArray = searchTermEnumerable.Select(x => _qry.Dispatch(new ValidateSearchTermQuery(x))).ToArray();
+            if (request.IsMirnaAndTermSearch)
+            {
+                if (validatedVectorMetaDataArray.Any(vectorMetaData => vectorMetaData.Type == "term"))
+                {
+                    var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent("Cannot process MiRNA & Term Search because there are terms in the search list."),
+                        ReasonPhrase = "Bad Request (Cannot Process MiRNA & Term Search)"
+                    };
+                    throw new HttpResponseException(resp);
+                }
+            }
+            
             var compositeVector = _searchFactory.ComputeCompositeVector(validatedVectorMetaDataArray);
             return request.IsMirnaAndTermSearch ? _searchFactory.ComputeMirnaAndTermResultTerms(compositeVector) 
                 : _searchFactory.ComputeMirnaResultTerms(compositeVector);

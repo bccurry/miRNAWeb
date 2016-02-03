@@ -14,6 +14,10 @@ var SearchSection = (function () {
                 _this.searchSvc.processSearchRequest(scope.searchList, isMirnaAndTermSearch).then(function (result) {
                     console.log(result.data);
                     scope.resultList = result.data;
+                }, function (errorResult) {
+                    console.log(errorResult);
+                    console.log(errorResult.data);
+                    console.log(errorResult.status);
                 });
             };
             scope.$watch('percentageFinished', function (newVal, oldVal) {
