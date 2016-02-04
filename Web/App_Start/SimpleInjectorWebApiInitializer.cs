@@ -47,6 +47,7 @@ namespace Web.App_Start
 //            });
             container.Register<CosineSimilarity>(Lifestyle.Singleton);
             container.Register<ISearchFactory, SearchFactory>(Lifestyle.Transient);
+            container.Register<IValidationFactory, ValidationFactory>(Lifestyle.Transient);
             // For instance:
             // container.Register<IUserRepository, SqlUserRepository>(Lifestyle.Scoped);
         }

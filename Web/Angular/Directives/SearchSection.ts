@@ -21,13 +21,12 @@
         scope.compute = (isMirnaAndTermSearch: boolean) => {
             scope.isProcessing = true;
             this.searchSvc.processSearchRequest(scope.searchList, isMirnaAndTermSearch).then((result) => {
-                console.log(result.data);
-                scope.resultList =  result.data;
+                scope.resultList = result.data;
+                scope.errorMessage = null;
             },
             (errorResult) => {
-                console.log(errorResult);
-                console.log(errorResult.data);
-                console.log(errorResult.status);
+                scope.errorMessage = errorResult.data;
+                scope.isProcessing = false;
             });
         };
 
@@ -35,7 +34,8 @@
             console.log(newVal);
             if (!(newVal === oldVal)) {
                 //this.$timeout(() => {
-                    scope.resultBarPercentage = { "width": newVal + '%' };
+                scope.resultBarPercentage = { "width": newVal + '%' };
+                scope.isProcessing = newVal === 100 ? false : scope.isProcessing;
                 //}, 500);        
             }
         });

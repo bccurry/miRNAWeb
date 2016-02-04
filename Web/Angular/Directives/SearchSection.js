@@ -12,12 +12,11 @@ var SearchSection = (function () {
             scope.compute = function (isMirnaAndTermSearch) {
                 scope.isProcessing = true;
                 _this.searchSvc.processSearchRequest(scope.searchList, isMirnaAndTermSearch).then(function (result) {
-                    console.log(result.data);
                     scope.resultList = result.data;
+                    scope.errorMessage = null;
                 }, function (errorResult) {
-                    console.log(errorResult);
-                    console.log(errorResult.data);
-                    console.log(errorResult.status);
+                    scope.errorMessage = errorResult.data;
+                    scope.isProcessing = false;
                 });
             };
             scope.$watch('percentageFinished', function (newVal, oldVal) {
@@ -25,6 +24,7 @@ var SearchSection = (function () {
                 if (!(newVal === oldVal)) {
                     //this.$timeout(() => {
                     scope.resultBarPercentage = { "width": newVal + '%' };
+                    scope.isProcessing = newVal === 100 ? false : scope.isProcessing;
                 }
             });
         };

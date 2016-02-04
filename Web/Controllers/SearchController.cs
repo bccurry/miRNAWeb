@@ -21,12 +21,14 @@ namespace Web.Controllers
         private readonly IQueryDispatcher _qry;
         private readonly ICommandDispatcher _cmd;
         private readonly ISearchFactory _searchFactory;
+        private readonly IValidationFactory _validationFactory;
         private readonly IHubContext _hubContext;
-        public SearchController(IQueryDispatcher qry, ICommandDispatcher cmd, ISearchFactory searchFactory)
+        public SearchController(IQueryDispatcher qry, ICommandDispatcher cmd, ISearchFactory searchFactory, IValidationFactory validationFactory)
         {
             _qry = qry;
             _cmd = cmd;
             _searchFactory = searchFactory;
+            _validationFactory = validationFactory;
             _hubContext =
                         GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
         }
@@ -34,24 +36,10 @@ namespace Web.Controllers
         [Route("")]
         [HttpPost]
         public SearchResult ProcessSearchRequest(SearchRequest request)
-        {
-            
+        {         
             var delimiters = new char[] { '\r', '\n', ';', ',', '|' };
             var searchTermEnumerable = request.DelimitedSearchTerms.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-            var validatedVectorMetaDataArray = searchTermEnumerable.Select(x => _qry.Dispatch(new ValidateSearchTermQuery(x))).ToArray();
-            if (request.IsMirnaAndTermSearch)
-            {
-                if (validatedVectorMetaDataArray.Any(vectorMetaData => vectorMetaData.Type == "term"))
-                {
-                    var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                    {
-                        Content = new StringContent("Cannot process MiRNA & Term Search because there are terms in the search list."),
-                        ReasonPhrase = "Bad Request (Cannot Process MiRNA & Term Search)"
-                    };
-                    throw new HttpResponseException(resp);
-                }
-            }
-            
+            var validatedVectorMetaDataArray = _validationFactory.ValidateSearchTerms(searchTermEnumerable, request.IsMirnaAndTermSearch);
             var compositeVector = _searchFactory.ComputeCompositeVector(validatedVectorMetaDataArray);
             return request.IsMirnaAndTermSearch ? _searchFactory.ComputeMirnaAndTermResultTerms(compositeVector) 
                 : _searchFactory.ComputeMirnaResultTerms(compositeVector);

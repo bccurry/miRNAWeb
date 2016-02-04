@@ -33,13 +33,13 @@
 
     _:-ms-lang(x), .compute-btn {
             float:left;
-            width: 49.75%;
+            width: 100%;
             margin-top: 5px;
         }
 
     _:-ms-lang(x), .clear-btn {
             float:right;
-            width: 49.75%;
+            width: 100%;
             margin-top: 5px;
         }
     /*@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
@@ -66,6 +66,7 @@
             <h2>Enter search term or delimited list of search terms below...</h2>
             <div class=".col-md-8">
                 <textarea ng-model="searchList"></textarea>
+                <p ng-if="errorMessage" id="errorMessage" style="color: red; font-family: 'Lato', sans-serif;font-weight: 300;font-size: 22px;">{{errorMessage}}</p>
             </div>
                 <div class="col-md-4 margin-right-5">
                     <a class="btn btn-primary compute-btn" ng-click="compute(false)"><li class="fa fa-gg fa-lg"></li>&nbsp;&nbsp;Compute miRNA</a>
