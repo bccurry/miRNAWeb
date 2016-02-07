@@ -20,10 +20,12 @@
 
     link = (scope) => {
         scope.compute = (isMirnaAndTermSearch: boolean) => {
+            scope.resultList = null;
             scope.isProcessing = true;
             this.searchSvc.processSearchRequest(scope.searchList, isMirnaAndTermSearch).then((result) => {
                 scope.resultList = result.data;
                 scope.errorMessage = null;
+                scope.isProcessing = false;
             },
             (errorResult) => {
                 scope.errorMessage = errorResult.data;
@@ -36,7 +38,7 @@
             if (!(newVal === oldVal)) {
                 //this.$timeout(() => {
                 scope.resultBarPercentage = { "width": newVal + '%' };
-                scope.isProcessing = newVal === 100 ? false : scope.isProcessing;
+                //scope.isProcessing = newVal === 100 ? false : scope.isProcessing;
                 //}, 500);        
             }
         });

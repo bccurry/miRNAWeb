@@ -11,16 +11,18 @@ var ResultSection = (function () {
         this.link = function (scope) {
             scope.$watch("isProcessing", function (newVal) {
                 if (newVal === true) {
-                    console.log("Brandon");
                     scope.clearGraph();
                     scope.abstractComponent = null;
                 }
-            });
-            scope.$watch("resultList.TermResultTerms", function (newVal) {
-                if (newVal) {
-                    scope.gridClass = "col-md-6";
+                else {
+                    if (scope.resultList.TermResultTerms) {
+                        scope.gridClass = "col-md-6";
+                    }
+                    else {
+                        scope.gridClass = "";
+                    }
                 }
-            }, true);
+            });
             scope.gridClass = "";
             scope.gridOptionsMirna = {};
             scope.gridOptionsMirna.data = 'resultList.MirnaResultTerms';
@@ -155,4 +157,3 @@ var ResultSection = (function () {
     return ResultSection;
 })();
 app.directive('resultSection', ['searchSvc', function (searchSvc) { return new ResultSection(searchSvc); }]);
-//# sourceMappingURL=ResultSection.js.map

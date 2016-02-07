@@ -16,18 +16,18 @@
 
     link = (scope) => {
 
-        scope.$watch("isProcessing", (newVal) => {
+        scope.$watch("isProcessing", (newVal) => {         
             if (newVal === true) {
-                console.log("Brandon");
                 scope.clearGraph();
                 scope.abstractComponent = null;
+            } else {
+                if (scope.resultList.TermResultTerms) {
+                    scope.gridClass = "col-md-6";
+                } else {
+                    scope.gridClass = "";
+                }
             }
         });
-        scope.$watch("resultList.TermResultTerms", (newVal) => {
-            if (newVal) {
-                scope.gridClass = "col-md-6";
-            }
-        }, true);
 
         scope.gridClass = "";
         scope.gridOptionsMirna = {};

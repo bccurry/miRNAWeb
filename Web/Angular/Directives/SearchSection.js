@@ -11,10 +11,12 @@ var SearchSection = (function () {
         this.templateUrl = 'Angular/Templates/SearchSection.html';
         this.link = function (scope) {
             scope.compute = function (isMirnaAndTermSearch) {
+                scope.resultList = null;
                 scope.isProcessing = true;
                 _this.searchSvc.processSearchRequest(scope.searchList, isMirnaAndTermSearch).then(function (result) {
                     scope.resultList = result.data;
                     scope.errorMessage = null;
+                    scope.isProcessing = false;
                 }, function (errorResult) {
                     scope.errorMessage = errorResult.data;
                     scope.isProcessing = false;
@@ -25,7 +27,6 @@ var SearchSection = (function () {
                 if (!(newVal === oldVal)) {
                     //this.$timeout(() => {
                     scope.resultBarPercentage = { "width": newVal + '%' };
-                    scope.isProcessing = newVal === 100 ? false : scope.isProcessing;
                 }
             });
         };
@@ -35,4 +36,3 @@ var SearchSection = (function () {
     return SearchSection;
 })();
 app.directive('searchSection', ['searchSvc', '$timeout', function (searchSvc, $timeout) { return new SearchSection(searchSvc, $timeout); }]);
-//# sourceMappingURL=SearchSection.js.map
