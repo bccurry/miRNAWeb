@@ -1,0 +1,1 @@
+MicroRNAs cross the line: the battle for mRNA stability enters the coding sequence. A study in this issue of Molecular Cell (Elcheva et al., 2009) shows the inherent instability of the betaTrCP1 mRNA to be caused by microRNA-183 targeting the coding sequence; interestingly, this action is directly opposed by the RNA-binding protein CRD-BP.

@@ -1,6 +1,7 @@
 app.controller('mainCtrl', ['$scope', 'messageHubSvc', '$location', '$anchorScroll', '$timeout', function ($scope, messageHubSvc, $location, $anchorScroll, $timeout) {
         $scope.resultList = "";
         $scope.percentageBar = { percent: 0 };
+        $scope.processing = { isProcessing: false };
         messageHubSvc.connect();
         $scope.$on('percentageFinishedClient', function (event, percentageFinished) {
             $scope.$apply(function () {

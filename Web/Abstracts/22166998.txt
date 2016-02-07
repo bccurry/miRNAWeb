@@ -1,0 +1,1 @@
+miR-605 joins p53 network to form a p53:miR-605:Mdm2 positive feedback loop in response to stress. 

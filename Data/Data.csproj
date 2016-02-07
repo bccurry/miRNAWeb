@@ -63,6 +63,7 @@
     <Compile Include="Models\VectorMetaData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\AbstractsQuery.cs" />
     <Compile Include="Queries\AllVectorMetaDataQuery.cs" />
     <Compile Include="Queries\ValidateSearchTermsQuery.cs" />
     <Compile Include="Queries\VectorByNameAndTypeQuery.cs" />

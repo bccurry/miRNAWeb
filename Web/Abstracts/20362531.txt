@@ -1,0 +1,1 @@
+MicroRNA-9 controls a migratory mechanism in human neural progenitor cells. MicroRNAs play roles in developmental switching; however, their roles in human neural progenitor cells (hNPCs) is poorly understood. In this issue of Cell Stem Cell, Delaloy et al. (2010) report that proliferation and migration choices in hNPCs are regulated by miR-9.

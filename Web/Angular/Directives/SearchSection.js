@@ -5,7 +5,8 @@ var SearchSection = (function () {
         this.scope = {
             //@ reads the attribute value, = provides two-way binding, & works with functions
             resultList: '=',
-            percentageFinished: '='
+            percentageFinished: '=',
+            isProcessing: '='
         };
         this.templateUrl = 'Angular/Templates/SearchSection.html';
         this.link = function (scope) {

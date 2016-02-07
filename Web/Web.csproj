@@ -1008,6 +1008,7 @@
     <Compile Include="App_Start\SimpleInjectorWebApiInitializer.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Factories\AbstractFactory.cs" />
     <Compile Include="Factories\HttpExceptionFactory.cs" />
     <Compile Include="Factories\SearchFactory.cs" />
     <Compile Include="Factories\ValidationFactory.cs" />
@@ -1055,6 +1056,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Abstracts\" />
     <Folder Include="Angular\Filters\" />
     <Folder Include="Angular\Models\" />
     <Folder Include="App_Data\" />

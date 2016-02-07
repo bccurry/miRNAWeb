@@ -1,5 +1,6 @@
 ﻿interface ISearchSvc {
     processSearchRequest(delimitedSearchTerms: string, isMirnaAndTermSearch: boolean);
+    retrieveAbstracts(requestEnumerable: string[]);
 }
 
 class SearchSvc implements ISearchSvc {
@@ -15,6 +16,11 @@ class SearchSvc implements ISearchSvc {
         var request = { DelimitedSearchTerms: delimitedSearchTerms, IsMirnaAndTermSearch: isMirnaAndTermSearch };
         var url = 'api/search';
         return this.$http.post(url, request);
+    }
+
+    retrieveAbstracts(requestEnumerable: string[]) {
+        var url = 'api/search/abstracts';
+        return this.$http.post(url, requestEnumerable);
     }
 }
 

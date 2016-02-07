@@ -1,0 +1,1 @@
+Tumour invasion: a new twist on Rac-driven mesenchymal migration. Elongated mesenchymal migration of cancer cells is driven by Rac1 activation mediated by the adaptor NEDD9 and the exchange factor DOCK3. A new study reports a role for the transcription factor Twist1 in inducing mesenchymal migration by relieving the suppression of NEDD9 and DOCK3 by the microRNA let-7i.

@@ -1,0 +1,1 @@
+-Actin is predicted as one of the potential targets of miR-145: choose internal control gene in verification of microRNA target. 

@@ -1,0 +1,1 @@
+Myc-modulated miR-9 makes more metastases. The microRNA miR-9 is induced by Myc in breast cancer cells where it targets the major epithelial adherens junction protein, E-cadherin. This primes the cancer cells for epithelial-mesenchymal transition (EMT) and also stimulates angiogenesis in tumours.

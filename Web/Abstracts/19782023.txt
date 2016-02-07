@@ -1,0 +1,1 @@
+mir-210: a sensor for hypoxic stress during tumorigenesis. In this issue of Molecular Cell, Huang et al. (2009) demonstrate that hypoxia-inducible mir-210 acts as a rheostat for cellular adaptation and survival by inhibiting tumor initiation.

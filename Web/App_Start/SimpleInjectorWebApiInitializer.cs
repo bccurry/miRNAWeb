@@ -34,22 +34,10 @@ namespace Web.App_Start
         {
             container.Register<IQueryDispatcher, QueryDispatcher>(Lifestyle.Transient);
             container.Register<ICommandDispatcher, CommandDispatcher>(Lifestyle.Singleton);
-//            container.Register<IMessageHub, MessageHub>(Lifestyle.Singleton);
-//            container.RegisterInitializer<MessageHub>(x =>
-//            {
-//                x.UpdatePercentageFinished =
-//                    (count) =>
-//                    {
-//                        GlobalHost.ConnectionManager.GetHubContext<MessageHub>()
-//                            .Clients.All.percentageFinishedClient(count);
-//                        return true;
-//                    };
-//            });
             container.Register<CosineSimilarity>(Lifestyle.Singleton);
             container.Register<ISearchFactory, SearchFactory>(Lifestyle.Transient);
             container.Register<IValidationFactory, ValidationFactory>(Lifestyle.Transient);
-            // For instance:
-            // container.Register<IUserRepository, SqlUserRepository>(Lifestyle.Scoped);
+            container.Register<IAbstractFactory, AbstractFactory>(Lifestyle.Transient);     
         }
     }
 }

@@ -1,16 +1,28 @@
 ﻿class ResultSection implements angular.IDirective {
+    private searchSvc: ISearchSvc;
+
+    constructor(searchSvc) {
+        this.searchSvc = searchSvc;
+    }
 
     restrict = 'E'; //E = element, A = attribute, C = class, M = comment         
     scope = {
         //@ reads the attribute value, = provides two-way binding, & works with functions
         resultList: '=',
-        percentageFinished: '='
+        isProcessing: '='
     };
 
     templateUrl = 'Angular/Templates/ResultSection.html';
 
     link = (scope) => {
-       
+
+        scope.$watch("isProcessing", (newVal) => {
+            if (newVal === true) {
+                console.log("Brandon");
+                scope.clearGraph();
+                scope.abstractComponent = null;
+            }
+        });
         scope.$watch("resultList.TermResultTerms", (newVal) => {
             if (newVal) {
                 scope.gridClass = "col-md-6";
@@ -143,7 +155,21 @@
             });
         }
 
+        scope.retrieveAbstracts = () => {
+            var selectedNodes = scope.cy.$("node:selected");
+            var requestEnumerable = [];
+            angular.forEach(selectedNodes, (value, key) => {
+                requestEnumerable.push(value._private.data.name);
+            });
+            this.searchSvc.retrieveAbstracts(requestEnumerable).then((result) => {
+                scope.abstractComponent = result.data;
+            });
+        }
+
+        scope.clearGraph = () => {
+            scope.cy.remove("*");
+        };
     }
 }
 
-app.directive('resultSection', [() => { return new ResultSection(); }]);
+app.directive('resultSection', ['searchSvc', (searchSvc) => { return new ResultSection(searchSvc); }]);

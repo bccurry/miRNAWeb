@@ -1,13 +1,21 @@
 var ResultSection = (function () {
-    function ResultSection() {
+    function ResultSection(searchSvc) {
+        var _this = this;
         this.restrict = 'E'; //E = element, A = attribute, C = class, M = comment         
         this.scope = {
             //@ reads the attribute value, = provides two-way binding, & works with functions
             resultList: '=',
-            percentageFinished: '='
+            isProcessing: '='
         };
         this.templateUrl = 'Angular/Templates/ResultSection.html';
         this.link = function (scope) {
+            scope.$watch("isProcessing", function (newVal) {
+                if (newVal === true) {
+                    console.log("Brandon");
+                    scope.clearGraph();
+                    scope.abstractComponent = null;
+                }
+            });
             scope.$watch("resultList.TermResultTerms", function (newVal) {
                 if (newVal) {
                     scope.gridClass = "col-md-6";
@@ -128,9 +136,23 @@ var ResultSection = (function () {
                     }
                 });
             };
+            scope.retrieveAbstracts = function () {
+                var selectedNodes = scope.cy.$("node:selected");
+                var requestEnumerable = [];
+                angular.forEach(selectedNodes, function (value, key) {
+                    requestEnumerable.push(value._private.data.name);
+                });
+                _this.searchSvc.retrieveAbstracts(requestEnumerable).then(function (result) {
+                    scope.abstractComponent = result.data;
+                });
+            };
+            scope.clearGraph = function () {
+                scope.cy.remove("*");
+            };
         };
+        this.searchSvc = searchSvc;
     }
     return ResultSection;
 })();
-app.directive('resultSection', [function () { return new ResultSection(); }]);
+app.directive('resultSection', ['searchSvc', function (searchSvc) { return new ResultSection(searchSvc); }]);
 //# sourceMappingURL=ResultSection.js.map

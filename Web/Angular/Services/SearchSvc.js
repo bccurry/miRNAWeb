@@ -8,6 +8,10 @@ var SearchSvc = (function () {
         var url = 'api/search';
         return this.$http.post(url, request);
     };
+    SearchSvc.prototype.retrieveAbstracts = function (requestEnumerable) {
+        var url = 'api/search/abstracts';
+        return this.$http.post(url, requestEnumerable);
+    };
     return SearchSvc;
 })();
 app.service('searchSvc', ['$http', '$q', function ($http, $q) { return new SearchSvc($http, $q); }]);

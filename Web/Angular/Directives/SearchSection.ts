@@ -12,7 +12,8 @@
     scope = {
         //@ reads the attribute value, = provides two-way binding, & works with functions
         resultList: '=',
-        percentageFinished: '='
+        percentageFinished: '=',
+        isProcessing: '='
     };
 
     templateUrl = 'Angular/Templates/SearchSection.html';
