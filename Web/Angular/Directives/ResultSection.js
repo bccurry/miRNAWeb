@@ -139,6 +139,7 @@ var ResultSection = (function () {
                 });
             };
             scope.retrieveAbstracts = function () {
+                scope.abstractComponent = null;
                 var selectedNodes = scope.cy.$("node:selected");
                 var requestEnumerable = [];
                 angular.forEach(selectedNodes, function (value, key) {
@@ -157,3 +158,4 @@ var ResultSection = (function () {
     return ResultSection;
 })();
 app.directive('resultSection', ['searchSvc', function (searchSvc) { return new ResultSection(searchSvc); }]);
+//# sourceMappingURL=ResultSection.js.map

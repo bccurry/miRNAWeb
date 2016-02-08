@@ -54,7 +54,8 @@ namespace Web.Controllers
         public string GetAbstracts(IEnumerable<string> requestEnumerable)
         {
             var pmidEnumerable = _qry.Dispatch(new AbstractsQuery(requestEnumerable));
-            return _abstractFactory.BuildAbstractComponent(pmidEnumerable);
+            var abstractComponent = _abstractFactory.BuildAbstractComponent(pmidEnumerable);
+            return _abstractFactory.HighlightSearchTerms(requestEnumerable, abstractComponent);
         }
 
     }

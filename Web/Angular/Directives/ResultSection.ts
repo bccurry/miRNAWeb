@@ -156,6 +156,7 @@
         }
 
         scope.retrieveAbstracts = () => {
+            scope.abstractComponent = null;
             var selectedNodes = scope.cy.$("node:selected");
             var requestEnumerable = [];
             angular.forEach(selectedNodes, (value, key) => {

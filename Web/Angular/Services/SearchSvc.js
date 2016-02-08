@@ -15,3 +15,4 @@ var SearchSvc = (function () {
     return SearchSvc;
 })();
 app.service('searchSvc', ['$http', '$q', function ($http, $q) { return new SearchSvc($http, $q); }]);
+//# sourceMappingURL=SearchSvc.js.map

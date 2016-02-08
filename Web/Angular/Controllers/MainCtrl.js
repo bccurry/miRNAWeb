@@ -13,3 +13,4 @@ app.controller('mainCtrl', ['$scope', 'messageHubSvc', '$location', '$anchorScro
             });
         });
     }]);
+//# sourceMappingURL=MainCtrl.js.map

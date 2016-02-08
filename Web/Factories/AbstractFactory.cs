@@ -4,12 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using Microsoft.Owin.Security.Provider;
 
 namespace Web.Factories
 {
     public interface IAbstractFactory
     {
         string BuildAbstractComponent(IEnumerable<string> pmidEnumerable);
+        string HighlightSearchTerms(IEnumerable<string> searchEnumerable, string abstractComponent);
+
     }
     public class AbstractFactory: IAbstractFactory
     {
@@ -32,6 +35,11 @@ namespace Web.Factories
                 formattedAbstractComponent += "<p><b>" + @abstract.Insert(indexOfPeriod, "</b><br/>");
             }
             return formattedAbstractComponent;
+        }
+
+        public string HighlightSearchTerms(IEnumerable<string> searchEnumerable, string abstractComponent)
+        {
+            return searchEnumerable.Aggregate(abstractComponent, (current, item) => current.Replace(item, "<span>" + item + "</span>"));
         }
     }
 }
