@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Web;
 using Microsoft.Owin.Security.Provider;
 
@@ -39,7 +40,13 @@ namespace Web.Factories
 
         public string HighlightSearchTerms(IEnumerable<string> searchEnumerable, string abstractComponent)
         {
-            return searchEnumerable.Aggregate(abstractComponent, (current, item) => current.Replace(item, "<span>" + item + "</span>"));
+            foreach (var term in searchEnumerable)
+            {
+                var regexTerm = term.Substring(4);
+                abstractComponent = Regex.Replace(abstractComponent, regexTerm, "<span style=\"background-color:yellow\">" + regexTerm + "</span>", RegexOptions.IgnoreCase);
+            }
+
+            return abstractComponent;        
         }
     }
 }

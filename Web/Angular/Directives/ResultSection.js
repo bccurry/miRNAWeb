@@ -1,5 +1,5 @@
 var ResultSection = (function () {
-    function ResultSection(searchSvc) {
+    function ResultSection(searchSvc, $sce) {
         var _this = this;
         this.restrict = 'E'; //E = element, A = attribute, C = class, M = comment         
         this.scope = {
@@ -146,7 +146,7 @@ var ResultSection = (function () {
                     requestEnumerable.push(value._private.data.name);
                 });
                 _this.searchSvc.retrieveAbstracts(requestEnumerable).then(function (result) {
-                    scope.abstractComponent = result.data;
+                    scope.abstractComponent = _this.$sce.trustAsHtml(result.data);
                 });
             };
             scope.clearGraph = function () {
@@ -154,8 +154,9 @@ var ResultSection = (function () {
             };
         };
         this.searchSvc = searchSvc;
+        this.$sce = $sce;
     }
     return ResultSection;
 })();
-app.directive('resultSection', ['searchSvc', function (searchSvc) { return new ResultSection(searchSvc); }]);
+app.directive('resultSection', ['searchSvc', '$sce', function (searchSvc, $sce) { return new ResultSection(searchSvc, $sce); }]);
 //# sourceMappingURL=ResultSection.js.map

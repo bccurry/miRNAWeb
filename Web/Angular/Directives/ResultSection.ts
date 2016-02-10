@@ -1,8 +1,9 @@
 ﻿class ResultSection implements angular.IDirective {
     private searchSvc: ISearchSvc;
-
-    constructor(searchSvc) {
+    private $sce;
+    constructor(searchSvc, $sce) {
         this.searchSvc = searchSvc;
+        this.$sce = $sce;
     }
 
     restrict = 'E'; //E = element, A = attribute, C = class, M = comment         
@@ -163,7 +164,7 @@
                 requestEnumerable.push(value._private.data.name);
             });
             this.searchSvc.retrieveAbstracts(requestEnumerable).then((result) => {
-                scope.abstractComponent = result.data;
+                scope.abstractComponent = this.$sce.trustAsHtml(result.data);
             });
         }
 
@@ -173,4 +174,4 @@
     }
 }
 
-app.directive('resultSection', ['searchSvc', (searchSvc) => { return new ResultSection(searchSvc); }]);
+app.directive('resultSection', ['searchSvc', '$sce', (searchSvc, $sce) => { return new ResultSection(searchSvc, $sce); }]);

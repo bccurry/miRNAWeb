@@ -55,7 +55,8 @@ namespace Web.Controllers
         {
             var pmidEnumerable = _qry.Dispatch(new AbstractsQuery(requestEnumerable));
             var abstractComponent = _abstractFactory.BuildAbstractComponent(pmidEnumerable);
-            return _abstractFactory.HighlightSearchTerms(requestEnumerable, abstractComponent);
+            var test = _abstractFactory.HighlightSearchTerms(requestEnumerable, abstractComponent);
+            return test;
         }
 
     }
