@@ -40,13 +40,9 @@ namespace Web.Factories
 
         public string HighlightSearchTerms(IEnumerable<string> searchEnumerable, string abstractComponent)
         {
-            foreach (var term in searchEnumerable)
-            {
-                var regexTerm = term.Substring(4);
-                abstractComponent = Regex.Replace(abstractComponent, regexTerm, "<span style=\"background-color:yellow\">" + regexTerm + "</span>", RegexOptions.IgnoreCase);
-            }
-
-            return abstractComponent;        
+            return searchEnumerable.Select(term => term.Substring(4))
+                .Aggregate(abstractComponent, (current, regexTerm) => 
+                Regex.Replace(current, regexTerm, "<span style=\"background-color:yellow\">" + regexTerm + "</span>", RegexOptions.IgnoreCase));
         }
     }
 }

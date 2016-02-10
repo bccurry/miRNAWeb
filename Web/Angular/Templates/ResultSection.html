@@ -1,8 +1,8 @@
 ﻿<style>
     .result-block {
         border: 5px #34495e solid;
-        min-height: 400px;
-        max-height: 400px;
+        min-height: 439px;
+        max-height: 439px;
         margin-bottom: .5%;
         padding-left: 0px;
         padding-right: 0px;
@@ -13,37 +13,60 @@
         padding-right: 0px !important;
     }
 
-
+    .heading {
+        border-top-left-radius: 0px !important; 
+        border-top-right-radius: 0px !important;
+    }
 </style>
 
 
-<div id="results" class="container wow fadeIn animated">
-    <h1>Results</h1>
-</div><!-- /container -->
+<!--<div id="results" class="container wow fadeIn animated">-->
+<!--    <h1>Results</h1>-->
+<!--</div>$1$ /container #1#-->
 
 <div class="container">
     <div class="row">
-        <div class="col-md-5 result-block wow fadeInLeft animated" style="float: left" data-wow-delay="0.1s">
-<!--            <input type="button" class="btn-info" style="z-index: -1"/>-->
-            <div ng-class="gridClass">
-                <div id="gridMrina" ng-if="resultList.MirnaResultTerms" ui-grid="gridOptionsMirna" class="grid" ui-grid-infinite-scroll></div>
+        
+        <!-- Grid Section -->
+        <div class="col-md-5 result-block wow fadeInLeft animated panel panel-primary" style="float: left" data-wow-delay="0.1s">
+            <div class="panel-heading heading">Correlation Section</div>
+            <div class="panel-body">
+                <div ng-class="gridClass">
+                    <div id="gridMrina" ng-if="resultList.MirnaResultTerms" ui-grid="gridOptionsMirna" class="grid" ui-grid-infinite-scroll></div>
+                </div>
+                <div class="col-md-6">
+                    <div id="gridTerm" ng-if="resultList.TermResultTerms" ui-grid="gridOptionsTerm" class="grid" ui-grid-infinite-scroll></div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <div id="gridTerm" ng-if="resultList.TermResultTerms" ui-grid="gridOptionsTerm" class="grid" ui-grid-infinite-scroll></div>
+        </div>
+
+        <!-- Abstract Section -->
+        <div class="col-md-5 result-block wow fadeInLeft animated panel panel-primary" style="float: right;" data-wow-delay="0.2s">
+            <div class="panel-heading heading">Abstract Section</div>
+            <div class="panel-body" style="overflow-y: scroll; max-height: 391px">
+                <div ng-if="abstractComponent" ng-bind-html="abstractComponent"></div>
             </div>
-        </div><!-- /col-md-6 -->
-        <div class="col-md-5 result-block wow fadeInLeft animated" style="float: right; overflow-y:scroll" data-wow-delay="0.2s">
-            <div ng-if="abstractComponent" ng-bind-html="abstractComponent"></div>
-        </div><!-- /col-md-6 -->
+        </div>
+
     </div><!-- /row -->
 
     <div class="row">
-        <div class="col-md-5 result-block wow fadeInLeft animated" style="float: left;" data-wow-delay="0.1s">
-            <div id="cy" style="width: 100%; height: 400px;display: block;"></div>
-        </div><!-- /col-md-6 -->
-        <div class="col-md-5 result-block wow fadeInLeft animated" style="float: right;" data-wow-delay="0.2s">
 
-        </div><!-- /col-md-6 -->
+        <!-- Graph Section -->
+        <div class="col-md-5 result-block wow fadeInLeft animated panel panel-primary" style="float: left;" data-wow-delay="0.1s">
+            <div class="panel-heading heading">Graph Section</div>
+            <div class="panel-body">
+                <div id="cy" style="width: 100%; height: 400px; display: block;"></div>
+            </div>
+        </div>
+
+
+        <!-- Log Entropy Section -->
+        <div class="col-md-5 result-block wow fadeInLeft animated panel panel-primary" style="float: right;" data-wow-delay="0.2s">
+            <div class="panel-heading heading">Log Entropy Section</div>
+            <div class="panel-body"></div>
+        </div>
+
     </div><!-- /row -->
 
  
