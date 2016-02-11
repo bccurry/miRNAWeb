@@ -136,8 +136,9 @@
         scope.addEdge = (rowEntity) => {
             angular.forEach(scope.cy.nodes(), (obj, idx) => {
                 var currentNode = obj.data();
+                
                 if (rowEntity.$$hashKey !== currentNode.id) {
-                    if (Math.abs(rowEntity.Value - currentNode.score) <= 0.2) {
+                    if (rowEntity.Value >= 0.4 && currentNode.score >= 0.4) {
 
                         var tmpCombinedId = rowEntity.$$hashKey + currentNode.id;
 
