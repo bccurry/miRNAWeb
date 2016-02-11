@@ -27,11 +27,10 @@ namespace Data.Queries
             {
                 const string query = @"SELECT Pmid FROM Abstract WHERE Symbol IN @SearchEnumerable";
                 var result = connection.Query<string>(query, new { SearchEnumerable }).ToList();
-                var result2 = SearchEnumerable.Count() > 1 ? result.GroupBy(x => x)
+                return SearchEnumerable.Count() > 1 ? result.GroupBy(x => x)
                                                                    .Where(g => g.Count() > 1)
                                                                    .Select(g => g.Key) 
                                                            : result;
-                return result2;
             }
         }
     }

@@ -21,12 +21,14 @@
     .scroll-vertical {
         overflow-y: scroll;
     }
+
+    .btn-render {
+        padding: 6px 12px; 
+        font-size: 12px; 
+        float: right;
+        margin-top: -10px;
+    }
 </style>
-
-
-<!--<div id="results" class="container wow fadeIn animated">-->
-<!--    <h1>Results</h1>-->
-<!--</div>$1$ /container #1#-->
 
 <div class="container">
     <div class="row">
@@ -46,7 +48,7 @@
 
         <!-- Abstract Section -->
         <div class="col-md-5 result-block wow fadeInLeft animated panel panel-primary" style="float: right;" data-wow-delay="0.2s">
-            <div class="panel-heading heading">Abstract Section</div>
+            <div class="panel-heading heading">Abstract Section <a class="btn btn-primary btn-render" ng-click="retrieveAbstracts()">Render</a></div>
             <div ng-class="abstractSectionClass" style="max-height: 391px">
                 <div ng-if="abstractComponent" ng-bind-html="abstractComponent"></div>
             </div>

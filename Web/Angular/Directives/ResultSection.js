@@ -49,13 +49,22 @@ var ResultSection = (function () {
                     'text-outline-width': 2,
                     'text-outline-color': '#888',
                     'min-zoomed-font-size': 8,
-                    'width': 'mapData(score, 0, 1, 20, 50)',
-                    'height': 'mapData(score, 0, 1, 20, 50)'
                 })
-                    .selector('node[node_type = "query"]')
+                    .selector('node[type = "miRNA"]')
                     .css({
-                    'background-color': '#666',
-                    'text-outline-color': '#666'
+                    'background-color': '#EE2C2C',
+                    'text-outline-color': '#EE2C2C',
+                    'shape': 'ellipse',
+                    'width': '60px',
+                    'height': '30px'
+                })
+                    .selector('node[type = "term"]')
+                    .css({
+                    'background-color': '#FFD700',
+                    'text-outline-color': '#FFD700',
+                    'shape': 'rectangle',
+                    'width': '60px',
+                    'height': '30px'
                 })
                     .selector('node:selected')
                     .css({
@@ -67,30 +76,6 @@ var ResultSection = (function () {
                     'curve-style': 'haystack',
                     'opacity': 0.75,
                     'width': '2'
-                })
-                    .selector('edge[data_type = "Predicted"]')
-                    .css({
-                    'line-color': '#F6C28C'
-                })
-                    .selector('edge[data_type = "Physical interactions"]')
-                    .css({
-                    'line-color': '#EAA2A3'
-                })
-                    .selector('edge[data_type = "Shared protein domains"]')
-                    .css({
-                    'line-color': '#DAD4A8'
-                })
-                    .selector('edge[data_type = "Co-expression"]')
-                    .css({
-                    'line-color': '#D0B7D3'
-                })
-                    .selector('edge[data_type = "Pathway"]')
-                    .css({
-                    'line-color': '#9BD8DD'
-                })
-                    .selector('edge[data_type = "Co-localization"]')
-                    .css({
-                    'line-color': '#A0B3D8'
                 })
                     .selector('edge:selected')
                     .css({
@@ -110,7 +95,7 @@ var ResultSection = (function () {
             };
             scope.addNode = function (rowEntity) {
                 scope.cy.add({
-                    data: { "id": rowEntity.$$hashKey, "name": rowEntity.Name, "score": rowEntity.Value, "query": true, "gene": true },
+                    data: { "id": rowEntity.$$hashKey, "name": rowEntity.Name, "score": rowEntity.Value, "type": rowEntity.Type, "query": true, "gene": true },
                     position: { "x": Math.floor((Math.random() * 400) + 1), "y": Math.floor((Math.random() * 400) + 1) },
                     group: "nodes"
                 });
@@ -119,22 +104,25 @@ var ResultSection = (function () {
                 scope.cy.remove(scope.cy.getElementById(rowEntity.$$hashKey));
             };
             scope.addEdge = function (rowEntity) {
+                console.log(rowEntity.Value + " " + rowEntity.Type);
                 angular.forEach(scope.cy.nodes(), function (obj, idx) {
                     var currentNode = obj.data();
                     if (rowEntity.$$hashKey !== currentNode.id) {
                         if (rowEntity.Value >= 0.4 && currentNode.score >= 0.4) {
-                            var tmpCombinedId = rowEntity.$$hashKey + currentNode.id;
-                            scope.cy.add({
-                                "data": {
-                                    "source": rowEntity.$$hashKey,
-                                    "target": currentNode.id,
-                                    "weight": 0.5,
-                                    "group": "Predicted",
-                                    "id": tmpCombinedId
-                                },
-                                "position": {},
-                                "group": "edges"
-                            });
+                            if (!(rowEntity.Type === "term" && currentNode.type === "term")) {
+                                var tmpCombinedId = rowEntity.$$hashKey + currentNode.id;
+                                scope.cy.add({
+                                    "data": {
+                                        "source": rowEntity.$$hashKey,
+                                        "target": currentNode.id,
+                                        "weight": 0.5,
+                                        "group": "Predicted",
+                                        "id": tmpCombinedId
+                                    },
+                                    "position": {},
+                                    "group": "edges"
+                                });
+                            }
                         }
                     }
                 });
@@ -142,15 +130,22 @@ var ResultSection = (function () {
             scope.retrieveAbstracts = function () {
                 scope.abstractComponent = null;
                 var selectedNodes = scope.cy.$("node:selected");
-                var requestEnumerable = [];
-                angular.forEach(selectedNodes, function (value, key) {
-                    requestEnumerable.push(value._private.data.name);
-                });
-                _this.searchSvc.retrieveAbstracts(requestEnumerable).then(function (result) {
-                    scope.abstractComponent = result.data ? _this.$sce.trustAsHtml(result.data) :
-                        _this.$sce.trustAsHtml("<div class=\"centered\"><b>No common abstracts for the selected miRNAs found</b></div>");
-                    scope.abstractSectionClass = result.data ? "panel-body scroll-vertical" : "panel-body";
-                });
+                console.log(selectedNodes);
+                if (selectedNodes.length > 0) {
+                    var requestEnumerable = [];
+                    angular.forEach(selectedNodes, function (value, key) {
+                        requestEnumerable.push(value._private.data.name);
+                    });
+                    _this.searchSvc.retrieveAbstracts(requestEnumerable).then(function (result) {
+                        scope.abstractComponent = result.data ? _this.$sce.trustAsHtml(result.data) :
+                            _this.$sce.trustAsHtml("<div class=\"centered\"><b>No common abstracts for the selected miRNAs found</b></div>");
+                        scope.abstractSectionClass = result.data ? "panel-body scroll-vertical" : "panel-body";
+                    });
+                }
+                else {
+                    scope.abstractComponent = _this.$sce.trustAsHtml("<div class=\"centered\"><b>No miRNAs selected</b></div>");
+                    scope.abstractSectionClass = "panel-body";
+                }
             };
             scope.clearGraph = function () {
                 scope.cy.remove("*");
