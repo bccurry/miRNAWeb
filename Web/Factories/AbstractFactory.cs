@@ -22,7 +22,7 @@ namespace Web.Factories
             var abstractPath = HttpContext.Current.Server.MapPath(@"\Abstracts");
             return BoldAbstractTitle(pmidEnumerable.Select(pmid => $@"{abstractPath}\{pmid}.txt")
                                  .Where(path => File.Exists(path))
-                                 .Aggregate(string.Empty, (current, path) => current + "<p>" + File.ReadAllText(path)+ "</p>"));
+                                 .Aggregate(string.Empty, (current, path) => current + "<p>" + path.Substring(path.LastIndexOf(@"\", StringComparison.Ordinal) + 1, (path.IndexOf(".", StringComparison.Ordinal) -1) - path.LastIndexOf(@"\", StringComparison.Ordinal)) + "|" + File.ReadAllText(path)+ "</p>"));
         }
 
         private static string BoldAbstractTitle(string abstractComponent)
@@ -33,16 +33,20 @@ namespace Web.Factories
             foreach (var @abstract in splitAbstractComponent)
             {
                 var indexOfPeriod = @abstract.IndexOf(".", StringComparison.Ordinal) + 1;
-                formattedAbstractComponent += "<p><b>" + @abstract.Insert(indexOfPeriod, "</b><br/>");
+                var pmid = @abstract.Substring(0, @abstract.IndexOf("|", StringComparison.Ordinal));
+                var tempAbstract = "<p><b><a target=\"_blank\" href> " + @abstract.Insert(indexOfPeriod, "</a></b><br/>");
+
+                formattedAbstractComponent += tempAbstract.Replace(pmid + "|", "").Replace("href", "href=\"http://www.ncbi.nlm.nih.gov/pubmed/" + pmid + "\"");
             }
             return formattedAbstractComponent;
         }
 
         public string HighlightSearchTerms(IEnumerable<string> searchEnumerable, string abstractComponent)
         {
-            return searchEnumerable.Select(term => term.Substring(4))
+            return abstractComponent.Any() ? searchEnumerable.Select(term => term.Substring(4))
                 .Aggregate(abstractComponent, (current, regexTerm) => 
-                Regex.Replace(current, regexTerm, "<span style=\"background-color:yellow\">" + regexTerm + "</span>", RegexOptions.IgnoreCase));
+                Regex.Replace(current, regexTerm, "<span style=\"background-color:yellow\">" + regexTerm + "</span>", RegexOptions.IgnoreCase)) :
+                null;
         }
     }
 }

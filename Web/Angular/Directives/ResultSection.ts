@@ -30,6 +30,7 @@
             }
         });
 
+        scope.abstractSectionClass = "panel-body";
         scope.gridClass = "";
         scope.gridOptionsMirna = {};
         scope.gridOptionsMirna.data = 'resultList.MirnaResultTerms';
@@ -164,7 +165,11 @@
                 requestEnumerable.push(value._private.data.name);
             });
             this.searchSvc.retrieveAbstracts(requestEnumerable).then((result) => {
-                scope.abstractComponent = this.$sce.trustAsHtml(result.data);
+
+                scope.abstractComponent = result.data ? this.$sce.trustAsHtml(result.data) :
+                    this.$sce.trustAsHtml("<div class=\"centered\"><b>No common abstracts for the selected miRNAs found</b></div>");
+
+                scope.abstractSectionClass = result.data ? "panel-body scroll-vertical" : "panel-body";
             });
         }
 

@@ -17,6 +17,10 @@
         border-top-left-radius: 0px !important; 
         border-top-right-radius: 0px !important;
     }
+
+    .scroll-vertical {
+        overflow-y: scroll;
+    }
 </style>
 
 
@@ -43,7 +47,7 @@
         <!-- Abstract Section -->
         <div class="col-md-5 result-block wow fadeInLeft animated panel panel-primary" style="float: right;" data-wow-delay="0.2s">
             <div class="panel-heading heading">Abstract Section</div>
-            <div class="panel-body" style="overflow-y: scroll; max-height: 391px">
+            <div ng-class="abstractSectionClass" style="max-height: 391px">
                 <div ng-if="abstractComponent" ng-bind-html="abstractComponent"></div>
             </div>
         </div>
