@@ -35,7 +35,7 @@ namespace Web.Factories
         {
             var percentageFinished = ComputePercentageFinished(current, total);
             _hubContext.Clients.All.percentageFinishedClient(percentageFinished);
-            return _cs.GetSimilarityScore(compositeVector, comparedVector);
+            return Math.Round(_cs.GetSimilarityScore(compositeVector, comparedVector), 5);
         }
 
         private int ComputePercentageFinished(double current, double total)

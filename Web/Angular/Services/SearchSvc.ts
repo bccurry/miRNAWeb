@@ -1,6 +1,7 @@
 ﻿interface ISearchSvc {
     processSearchRequest(delimitedSearchTerms: string, isMirnaAndTermSearch: boolean);
     retrieveAbstracts(requestEnumerable: string[]);
+    retrieveLogEntropys(requestEnumerable: string[]);
 }
 
 class SearchSvc implements ISearchSvc {
@@ -20,6 +21,11 @@ class SearchSvc implements ISearchSvc {
 
     retrieveAbstracts(requestEnumerable: string[]) {
         var url = 'api/search/abstracts';
+        return this.$http.post(url, requestEnumerable);
+    }
+
+    retrieveLogEntropys(requestEnumerable: string[]) {
+        var url = 'api/search/logentropys';
         return this.$http.post(url, requestEnumerable);
     }
 }

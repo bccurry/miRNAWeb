@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using Data.Dispatchers;
 using Data.Queries;
-using AForge.Math.Metrics;
 using Data.Models;
 using Microsoft.AspNet.SignalR;
-using Microsoft.Owin.Security.Provider;
 using Web.Factories;
 using Web.Hubs;
 
@@ -55,8 +49,15 @@ namespace Web.Controllers
         {
             var pmidEnumerable = _qry.Dispatch(new AbstractsQuery(requestEnumerable));
             var abstractComponent = _abstractFactory.BuildAbstractComponent(pmidEnumerable);
-            var test = _abstractFactory.HighlightSearchTerms(requestEnumerable, abstractComponent);
-            return test;
+            return _abstractFactory.HighlightSearchTerms(requestEnumerable, abstractComponent);
+        }
+
+        [Route("logentropys")]
+        [HttpPost]
+        public IEnumerable<LogEntropyResult> GetLogEntropys(IEnumerable<string> requestEnumerable)
+        {
+            var logEntropyEnumerable = _qry.Dispatch(new LogEntropyQuery(requestEnumerable));
+            return logEntropyEnumerable;
         }
 
     }

@@ -12,25 +12,27 @@ using Data.Models;
 
 namespace Data.Queries
 {
-    public class AbstractsQuery: IQuery<IEnumerable<string>>
+    public class LogEntropyQuery: IQuery<IEnumerable<LogEntropyResult>>
     {
         private IEnumerable<string> SearchEnumerable { get; set; }
 
-        public AbstractsQuery(IEnumerable<string> searchEnumerable)
+        public LogEntropyQuery(IEnumerable<string> searchEnumerable)
         {
             SearchEnumerable = searchEnumerable;
         }
 
-        public IEnumerable<string> Retrieve()
+        public IEnumerable<LogEntropyResult> Retrieve()
         {
             using (IDbConnection connection = new SqlConnection(MirnaGateway.Connection))
             {
-                const string query = @"SELECT Pmid FROM Abstract WHERE Symbol IN @SearchEnumerable";
-                var result = connection.Query<string>(query, new { SearchEnumerable }).ToList();
-                return SearchEnumerable.Count() > 1 ? result.GroupBy(x => x)
+                const string query = @"SELECT LogEntropyTerm FROM LogEntropy WHERE Symbol IN @SearchEnumerable";
+                var result = connection.Query<LogEntropyResult>(query, new { SearchEnumerable }).ToList();
+                return SearchEnumerable.Count() > 1 ? result.GroupBy(x => x.LogEntropyTerm)
                                                                    .Where(g => g.Count() == SearchEnumerable.Count())
-                                                                   .Select(g => g.Key) 
+                                                                   .Select(g => new LogEntropyResult { LogEntropyTerm = g.Key }) 
                                                            : result;
+
+                
             }
         }
     }

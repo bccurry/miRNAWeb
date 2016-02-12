@@ -12,7 +12,10 @@ var SearchSvc = (function () {
         var url = 'api/search/abstracts';
         return this.$http.post(url, requestEnumerable);
     };
+    SearchSvc.prototype.retrieveLogEntropys = function (requestEnumerable) {
+        var url = 'api/search/logentropys';
+        return this.$http.post(url, requestEnumerable);
+    };
     return SearchSvc;
 })();
 app.service('searchSvc', ['$http', '$q', function ($http, $q) { return new SearchSvc($http, $q); }]);
-//# sourceMappingURL=SearchSvc.js.map

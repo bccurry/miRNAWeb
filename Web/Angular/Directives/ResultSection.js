@@ -13,6 +13,7 @@ var ResultSection = (function () {
                 if (newVal === true) {
                     scope.clearGraph();
                     scope.abstractComponent = null;
+                    scope.logEntropyComponent = null;
                 }
                 else {
                     if (scope.resultList.TermResultTerms) {
@@ -28,14 +29,19 @@ var ResultSection = (function () {
             scope.gridOptionsMirna = {};
             scope.gridOptionsMirna.data = 'resultList.MirnaResultTerms';
             scope.gridOptionsMirna.columnDefs = [
-                { name: 'Name', displayName: 'MiRNA' },
-                { name: 'IsActive', displayName: 'Active', type: 'boolean', cellTemplate: '<input type="checkbox" ng-model="row.entity.IsActive" ng-change="grid.appScope.addOrRemoveNode(row.entity)">' }
+                { name: 'Name', displayName: 'MiRNA', cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.IsActive" ng-change="grid.appScope.addOrRemoveNode(row.entity)"> {{row.entity[col.field]}}</div>' },
+                { name: 'Value', displayName: 'Score' }
             ];
             scope.gridOptionsTerm = {};
             scope.gridOptionsTerm.data = 'resultList.TermResultTerms';
             scope.gridOptionsTerm.columnDefs = [
-                { name: 'Name', displayName: 'Term' },
-                { name: 'IsActive', displayName: 'Active', type: 'boolean', cellTemplate: '<input type="checkbox" ng-model="row.entity.IsActive" ng-change="grid.appScope.addOrRemoveNode(row.entity)">' }
+                { name: 'Name', displayName: 'Term', cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.IsActive" ng-change="grid.appScope.addOrRemoveNode(row.entity)"> {{row.entity[col.field]}}</div>' },
+                { name: 'Value', displayName: 'Score' }
+            ];
+            scope.gridOptionsLogEntropy = {};
+            scope.gridOptionsLogEntropy.data = 'logEntropyComponent';
+            scope.gridOptionsLogEntropy.columnDefs = [
+                { name: 'LogEntropyTerm', displayName: 'Term' }
             ];
             scope.cy = cytoscape({
                 container: document.getElementById('cy'),
@@ -48,7 +54,7 @@ var ResultSection = (function () {
                     'color': 'white',
                     'text-outline-width': 2,
                     'text-outline-color': '#888',
-                    'min-zoomed-font-size': 8,
+                    'min-zoomed-font-size': 8
                 })
                     .selector('node[type = "miRNA"]')
                     .css({
@@ -130,7 +136,6 @@ var ResultSection = (function () {
             scope.retrieveAbstracts = function () {
                 scope.abstractComponent = null;
                 var selectedNodes = scope.cy.$("node:selected");
-                console.log(selectedNodes);
                 if (selectedNodes.length > 0) {
                     var requestEnumerable = [];
                     angular.forEach(selectedNodes, function (value, key) {
@@ -150,6 +155,23 @@ var ResultSection = (function () {
             scope.clearGraph = function () {
                 scope.cy.remove("*");
             };
+            scope.retrieveLogEntropys = function () {
+                scope.logEntropyComponent = null;
+                var selectedNodes = scope.cy.$("node:selected");
+                if (selectedNodes.length > 0) {
+                    var requestEnumerable = [];
+                    angular.forEach(selectedNodes, function (value, key) {
+                        requestEnumerable.push(value._private.data.name);
+                    });
+                    _this.searchSvc.retrieveLogEntropys(requestEnumerable).then(function (result) {
+                        scope.logEntropyComponent = result.data;
+                        console.log(scope.logEntropyComponent);
+                    });
+                }
+                else {
+                    scope.logEntropyComponent = null;
+                }
+            };
         };
         this.searchSvc = searchSvc;
         this.$sce = $sce;
@@ -157,4 +179,3 @@ var ResultSection = (function () {
     return ResultSection;
 })();
 app.directive('resultSection', ['searchSvc', '$sce', function (searchSvc, $sce) { return new ResultSection(searchSvc, $sce); }]);
-//# sourceMappingURL=ResultSection.js.map

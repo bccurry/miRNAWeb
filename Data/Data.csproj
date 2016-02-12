@@ -51,11 +51,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\BulkInsertLogEntropysCommand.cs" />
     <Compile Include="Commands\BulkInsertAbstractsCommand.cs" />
     <Compile Include="Dispatchers\ICommandDispatcher.cs" />
     <Compile Include="Dispatchers\IQueryDispatcher.cs" />
     <Compile Include="Gateways\MirnaGateway.cs" />
     <Compile Include="Models\Abstract.cs" />
+    <Compile Include="Models\LogEntropy.cs" />
+    <Compile Include="Models\LogEntropyResult.cs" />
     <Compile Include="Models\ResultTerm.cs" />
     <Compile Include="Models\SearchRequest.cs" />
     <Compile Include="Models\SearchResult.cs" />
@@ -63,6 +66,7 @@
     <Compile Include="Models\VectorMetaData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\LogEntropyQuery.cs" />
     <Compile Include="Queries\AbstractsQuery.cs" />
     <Compile Include="Queries\AllVectorMetaDataQuery.cs" />
     <Compile Include="Queries\ValidateSearchTermsQuery.cs" />

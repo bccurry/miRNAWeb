@@ -14,7 +14,8 @@ namespace Jobs
     {
         static void Main(string[] args)
         {
-            var job = new LoadAbstractsJob();
+            //var job = new LoadAbstractsJob();
+            var job = new LoadLogEntropyJob();
             job.Execute();
             Console.WriteLine("Finished");
             Console.ReadLine();

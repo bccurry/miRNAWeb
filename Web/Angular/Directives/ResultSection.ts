@@ -21,6 +21,7 @@
             if (newVal === true) {
                 scope.clearGraph();
                 scope.abstractComponent = null;
+                scope.logEntropyComponent = null;
             } else {
                 if (scope.resultList.TermResultTerms) {
                     scope.gridClass = "col-md-6";
@@ -35,15 +36,21 @@
         scope.gridOptionsMirna = {};
         scope.gridOptionsMirna.data = 'resultList.MirnaResultTerms';
         scope.gridOptionsMirna.columnDefs = [
-            { name: 'Name', displayName: 'MiRNA' },
-            { name: 'IsActive', displayName: 'Active', type: 'boolean', cellTemplate: '<input type="checkbox" ng-model="row.entity.IsActive" ng-change="grid.appScope.addOrRemoveNode(row.entity)">' }
+            { name: 'Name', displayName: 'MiRNA', cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.IsActive" ng-change="grid.appScope.addOrRemoveNode(row.entity)"> {{row.entity[col.field]}}</div>'}, 
+            { name: 'Value', displayName: 'Score'}
         ];
 
         scope.gridOptionsTerm = {};
         scope.gridOptionsTerm.data = 'resultList.TermResultTerms';
         scope.gridOptionsTerm.columnDefs = [
-            { name: 'Name', displayName: 'Term' },
-            { name: 'IsActive', displayName: 'Active', type: 'boolean', cellTemplate: '<input type="checkbox" ng-model="row.entity.IsActive" ng-change="grid.appScope.addOrRemoveNode(row.entity)">' }
+            { name: 'Name', displayName: 'Term', cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.IsActive" ng-change="grid.appScope.addOrRemoveNode(row.entity)"> {{row.entity[col.field]}}</div>'},
+            { name: 'Value', displayName: 'Score' }
+        ];
+
+        scope.gridOptionsLogEntropy = {};
+        scope.gridOptionsLogEntropy.data = 'logEntropyComponent';
+        scope.gridOptionsLogEntropy.columnDefs = [
+            { name: 'LogEntropyTerm', displayName: 'Term' }    
         ];
 
         scope.cy = cytoscape({
@@ -58,9 +65,7 @@
                     'color': 'white',
                     'text-outline-width': 2,
                     'text-outline-color': '#888',
-                    'min-zoomed-font-size': 8,
-//                    'width': 'mapData(score, 0, 1, 20, 50)',
-//                    'height': 'mapData(score, 0, 1, 20, 50)'
+                    'min-zoomed-font-size': 8
                 })
                 .selector('node[type = "miRNA"]')
                 .css({
@@ -150,7 +155,6 @@
         scope.retrieveAbstracts = () => {
             scope.abstractComponent = null;
             var selectedNodes = scope.cy.$("node:selected");
-            console.log(selectedNodes);
             if (selectedNodes.length > 0) {
                 var requestEnumerable = [];
                 angular.forEach(selectedNodes, (value, key) => {
@@ -172,6 +176,25 @@
 
         scope.clearGraph = () => {
             scope.cy.remove("*");
+        };
+
+        scope.retrieveLogEntropys = () => {
+            scope.logEntropyComponent = null;
+            var selectedNodes = scope.cy.$("node:selected");
+            if (selectedNodes.length > 0) {
+              
+                var requestEnumerable = [];
+                angular.forEach(selectedNodes, (value, key) => {
+                    requestEnumerable.push(value._private.data.name);
+                });
+
+                this.searchSvc.retrieveLogEntropys(requestEnumerable).then((result) => {
+                    scope.logEntropyComponent = result.data;
+                    console.log(scope.logEntropyComponent);
+                });
+            } else {
+                scope.logEntropyComponent = null;
+            }
         };
     }
 }

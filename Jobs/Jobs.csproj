@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Batch\LoadLogEntropyJob.cs" />
     <Compile Include="Batch\LoadAbstractsJob.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -51,6 +52,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Files\miRNA_LE_terms.txt" />
     <Content Include="Files\miRNA_PMID_mapping.txt" />
   </ItemGroup>
   <ItemGroup>
