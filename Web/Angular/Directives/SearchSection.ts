@@ -19,6 +19,10 @@
     templateUrl = 'Angular/Templates/SearchSection.html';
 
     link = (scope) => {
+        scope.clear = () => {
+            scope.searchList = null;
+        };
+
         scope.compute = (isMirnaAndTermSearch: boolean) => {
             scope.resultList = null;
             scope.isProcessing = true;
@@ -34,12 +38,8 @@
         };
 
         scope.$watch('percentageFinished', (newVal, oldVal) => {
-            console.log(newVal);
             if (!(newVal === oldVal)) {
-                //this.$timeout(() => {
                 scope.resultBarPercentage = { "width": newVal + '%' };
-                //scope.isProcessing = newVal === 100 ? false : scope.isProcessing;
-                //}, 500);        
             }
         });
     

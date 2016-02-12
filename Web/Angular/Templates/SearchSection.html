@@ -3,21 +3,17 @@
         width:100%; 
         min-height:150px;
         resize: none;
-        /*border: 5px #5081B5 solid*/
         border: 5px #34495e solid;
     }
 
     .compute-btn {
         float:left;
-        /*width: 33%;*/
         width: 100%;
-        /*margin-right: 4.5px;*/
     }
 
     .clear-btn {
         float:left;
         width: 100%;
-        /*width: 33%;*/
     }
 
     .margin-right-5 {
@@ -42,20 +38,7 @@
             width: 100%;
             margin-top: 5px;
         }
-    /*@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    
-        .compute-btn {
-            float:left;
-            width: 49.75%;
-            margin-top: 5px;
-        }
-
-        .clear-btn {
-            float:right;
-            width: 49.75%;
-            margin-top: 5px;
-        }
-    }*/
+  
 </style>
 
 
@@ -75,7 +58,7 @@
                     <a class="btn btn-primary compute-btn" ng-click="compute(true)"><li class="fa fa-gg fa-lg"></li>&nbsp;&nbsp;Compute miRNA &amp; term</a>
                 </div>
                 <div class="col-md-4">
-                    <a class="btn btn-primary clear-btn"><li class="fa fa-trash-o fa-lg"></li>&nbsp;&nbsp;Clear</a>
+                    <a class="btn btn-primary clear-btn" ng-click="clear()"><li class="fa fa-trash-o fa-lg"></li>&nbsp;&nbsp;Clear</a>
                 </div>
         </div>
     </div>
