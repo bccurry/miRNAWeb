@@ -23,15 +23,22 @@ namespace Web.Factories
         public IEnumerable<VectorMetaData> ValidateSearchTerms(IEnumerable<string> searchTermEnumerable, bool isMirnaAndTermSearch )
         {
             var validatedVectorMetaDataArray = searchTermEnumerable.Select(x => _qry.Dispatch(new ValidateSearchTermQuery(x))).ToArray();
+
             if (validatedVectorMetaDataArray.Any(x => x == null))
             {
                 throw new SearchTermNotFoundHttpException();
             }
-            else if (isMirnaAndTermSearch && validatedVectorMetaDataArray.Any(x => x.Type == "term"))
+
+            if (validatedVectorMetaDataArray.Count() > 50)
+            {
+                throw new LargeInputHttpException();
+            }
+
+            if (isMirnaAndTermSearch && validatedVectorMetaDataArray.Any(x => x.Type == "term"))
             {
                 throw new MirnaAndTermHttpException();
             }
-                
+
             return validatedVectorMetaDataArray;
         }
 

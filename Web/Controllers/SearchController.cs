@@ -35,7 +35,7 @@ namespace Web.Controllers
         [HttpPost]
         public SearchResult ProcessSearchRequest(SearchRequest request)
         {         
-            var delimiters = new char[] { '\r', '\n', ';', ',', '|' };
+            var delimiters = new char[] { '\r', '\n', ';', ',', '|', 't', ' ' };
             var searchTermEnumerable = request.DelimitedSearchTerms.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
             var validatedVectorMetaDataArray = _validationFactory.ValidateSearchTerms(searchTermEnumerable, request.IsMirnaAndTermSearch);
             var compositeVector = _searchFactory.ComputeCompositeVector(validatedVectorMetaDataArray);

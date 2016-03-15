@@ -26,6 +26,15 @@ namespace Web.Factories
         }
     }
 
+    public class LargeInputHttpResponse : HttpResponseMessage
+    {
+        public LargeInputHttpResponse() : base(HttpStatusCode.BadRequest)
+        {
+            Content = new StringContent("Cannot process search because there are more than 50 search term(s) in the search list.");
+            ReasonPhrase = "Bad Request (Invalid Search Term(s))";
+        }
+    }
+
     public class MirnaAndTermHttpException : HttpResponseException
     {
         public MirnaAndTermHttpException() :base(new MirnaAndTermHttpResponse())
@@ -36,6 +45,13 @@ namespace Web.Factories
     {
         public SearchTermNotFoundHttpException() : base(new SearchTermNotFoundHttpResponse())
         { }
+    }
+
+    public class LargeInputHttpException : HttpResponseException
+    {
+        public LargeInputHttpException() : base(new LargeInputHttpResponse())
+        {        
+        }
     }
 
 }

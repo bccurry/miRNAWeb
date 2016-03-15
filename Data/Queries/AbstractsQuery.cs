@@ -25,7 +25,7 @@ namespace Data.Queries
         {
             using (IDbConnection connection = new SqlConnection(MirnaGateway.Connection))
             {
-                const string query = @"SELECT Pmid FROM Abstract WHERE Symbol IN @SearchEnumerable";
+                const string query = @"SELECT Pmid FROM Abstract WHERE Symbol IN @SearchEnumerable ORDER BY Pmid DESC";
                 var result = connection.Query<string>(query, new { SearchEnumerable }).ToList();
                 return SearchEnumerable.Count() > 1 ? result.GroupBy(x => x)
                                                                    .Where(g => g.Count() == SearchEnumerable.Count())
