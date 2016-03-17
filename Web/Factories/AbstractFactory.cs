@@ -12,7 +12,7 @@ namespace Web.Factories
     public interface IAbstractFactory
     {
         string BuildAbstractComponent(IEnumerable<string> pmidEnumerable);
-        string HighlightSearchTerms(IEnumerable<string> searchEnumerable, string abstractComponent);
+        string HighlightSearchTerms(IEnumerable<string> searchEnumerable, string abstractComponent, IEnumerable<string> termEnumerable);
 
     }
     public class AbstractFactory: IAbstractFactory
@@ -41,12 +41,19 @@ namespace Web.Factories
             return formattedAbstractComponent;
         }
 
-        public string HighlightSearchTerms(IEnumerable<string> searchEnumerable, string abstractComponent)
+        public string HighlightSearchTerms(IEnumerable<string> searchEnumerable, string abstractComponent, IEnumerable<string> termEnumerable)
         {
-            return abstractComponent.Any() ? searchEnumerable.Select(term => term.Substring(4))
+            var result = abstractComponent.Any() ? searchEnumerable.Select(term => term.Substring(4))
                 .Aggregate(abstractComponent, (current, regexTerm) => 
                 Regex.Replace(current, regexTerm, "<span style=\"background-color:yellow\">" + regexTerm + "</span>", RegexOptions.IgnoreCase)) :
                 null;
+
+            return result != null
+                ? termEnumerable
+                    .Aggregate(result, (current, regexTerm) =>
+                        Regex.Replace(current, regexTerm,
+                            "<span style=\"background-color:#76EE00\">" + regexTerm + "</span>", RegexOptions.IgnoreCase))
+                : null;
         }
     }
 }

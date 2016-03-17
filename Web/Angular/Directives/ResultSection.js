@@ -41,7 +41,17 @@ var ResultSection = (function () {
             scope.gridOptionsLogEntropy = {};
             scope.gridOptionsLogEntropy.data = 'logEntropyComponent';
             scope.gridOptionsLogEntropy.columnDefs = [
-                { name: 'LogEntropyTerm', displayName: 'Term' }
+                {
+                    name: 'LogEntropyTerm',
+                    displayName: 'Term',
+                    cellClass: function (grid, row, col, rowRenderIndex, colRenderIndex) {
+                        if (grid.getCellValue(row, col).indexOf('span') > -1) {
+                            return 'green';
+                        }
+                        return '';
+                    },
+                    cellTemplate: '<div class="ui-grid-cell-contents" ng-bind-html="row.entity[col.field]"></div>'
+                }
             ];
             scope.cy = cytoscape({
                 container: document.getElementById('cy'),
@@ -137,39 +147,63 @@ var ResultSection = (function () {
                 scope.abstractComponent = null;
                 var selectedNodes = scope.cy.$("node:selected");
                 if (selectedNodes.length > 0) {
-                    var requestEnumerable = [];
+                    var request = {
+                        MirnaEnumerable: [],
+                        TermEnumerable: []
+                    };
                     angular.forEach(selectedNodes, function (value, key) {
-                        requestEnumerable.push(value._private.data.name);
+                        if (value._private.data.type === 'miRNA') {
+                            request.MirnaEnumerable.push(value._private.data.name);
+                        }
+                        else {
+                            request.TermEnumerable.push(value._private.data.name);
+                        }
                     });
-                    _this.searchSvc.retrieveAbstracts(requestEnumerable).then(function (result) {
-                        scope.abstractComponent = result.data ? _this.$sce.trustAsHtml(result.data) :
+                    _this.searchSvc.retrieveAbstracts(request).then(function (result) {
+                        scope.abstractComponent = result.data.Abstracts ? _this.$sce.trustAsHtml(result.data.Abstracts) :
                             _this.$sce.trustAsHtml("<div class=\"centered\"><b>No common abstracts for the selected miRNAs found</b></div>");
-                        scope.abstractSectionClass = result.data ? "panel-body scroll-vertical" : "panel-body";
+                        scope.abstractSectionClass = result.data.Abstracts ? "panel-body scroll-vertical" : "panel-body";
+                        scope.abstractCount = result.data.Abstracts ? result.data.Count : null;
                     });
                 }
                 else {
                     scope.abstractComponent = _this.$sce.trustAsHtml("<div class=\"centered\"><b>No miRNAs selected</b></div>");
                     scope.abstractSectionClass = "panel-body";
+                    scope.abstractCount = null;
                 }
             };
             scope.clearGraph = function () {
                 scope.cy.remove("*");
             };
             scope.retrieveLogEntropys = function () {
-                scope.logEntropyComponent = null;
+                scope.logEntropyComponent = [];
+                console.log(scope.logEntropyComponent);
                 var selectedNodes = scope.cy.$("node:selected");
                 if (selectedNodes.length > 0) {
-                    var requestEnumerable = [];
+                    var request = {
+                        MirnaEnumerable: [],
+                        TermEnumerable: []
+                    };
                     angular.forEach(selectedNodes, function (value, key) {
-                        requestEnumerable.push(value._private.data.name);
+                        if (value._private.data.type === 'miRNA') {
+                            request.MirnaEnumerable.push(value._private.data.name);
+                        }
+                        else {
+                            request.TermEnumerable.push(value._private.data.name);
+                        }
                     });
-                    _this.searchSvc.retrieveLogEntropys(requestEnumerable).then(function (result) {
-                        scope.logEntropyComponent = result.data;
-                        console.log(scope.logEntropyComponent);
+                    _this.searchSvc.retrieveLogEntropys(request).then(function (result) {
+                        scope.logEntropyComponent = result.data.LogEntropys;
+                        scope.logEntropyCount = result.data.Count;
+                        var tempThis = _this;
+                        scope.logEntropyComponent.forEach(function (d) {
+                            tempThis.$sce.trustAsHtml(d.LogEntropyTerm);
+                        });
                     });
                 }
                 else {
                     scope.logEntropyComponent = null;
+                    scope.logEntropyCount = null;
                 }
             };
         };
@@ -179,4 +213,3 @@ var ResultSection = (function () {
     return ResultSection;
 })();
 app.directive('resultSection', ['searchSvc', '$sce', function (searchSvc, $sce) { return new ResultSection(searchSvc, $sce); }]);
-//# sourceMappingURL=ResultSection.js.map

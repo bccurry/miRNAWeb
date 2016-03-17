@@ -37,7 +37,8 @@ namespace Web.App_Start
             container.Register<CosineSimilarity>(Lifestyle.Singleton);
             container.Register<ISearchFactory, SearchFactory>(Lifestyle.Transient);
             container.Register<IValidationFactory, ValidationFactory>(Lifestyle.Transient);
-            container.Register<IAbstractFactory, AbstractFactory>(Lifestyle.Transient);     
+            container.Register<IAbstractFactory, AbstractFactory>(Lifestyle.Transient);   
+            container.Register<ILogEntropyFactory, LogEntropyFactory>(Lifestyle.Transient);  
         }
     }
 }

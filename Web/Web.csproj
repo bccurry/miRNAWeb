@@ -1010,6 +1010,7 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Factories\AbstractFactory.cs" />
     <Compile Include="Factories\HttpExceptionFactory.cs" />
+    <Compile Include="Factories\LogEntropyFactory.cs" />
     <Compile Include="Factories\SearchFactory.cs" />
     <Compile Include="Factories\ValidationFactory.cs" />
     <Compile Include="Global.asax.cs">

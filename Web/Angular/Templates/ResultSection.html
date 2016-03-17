@@ -28,6 +28,11 @@
         float: right;
         margin-top: -10px;
     }
+
+    .green {
+        background-color: #76EE00;
+    }
+
 </style>
 
 <div class="container">
@@ -48,7 +53,7 @@
 
         <!-- Abstract Section -->
         <div class="col-md-5 result-block wow fadeInLeft animated panel panel-primary" style="float: right;" data-wow-delay="0.2s">
-            <div class="panel-heading heading">Abstracts</div>
+            <div class="panel-heading heading">Abstracts {{abstractCount ? "(" + abstractCount + ")" : ""}}</div>
             <div ng-class="abstractSectionClass" style="max-height: 391px">
                 <div ng-if="abstractComponent" ng-bind-html="abstractComponent"></div>
             </div>
@@ -69,7 +74,7 @@
 
         <!-- Log Entropy Section -->
         <div class="col-md-5 result-block wow fadeInLeft animated panel panel-primary" style="float: right;" data-wow-delay="0.2s">
-            <div class="panel-heading heading">Related Terms</div>
+            <div class="panel-heading heading">Related Terms {{logEntropyCount ? "(" + logEntropyCount + ")" : ""}}</div>
             <div class="panel-body">
                 <div id="gridLog" ng-if="logEntropyComponent" ui-grid="gridOptionsLogEntropy" class="grid" ui-grid-infinite-scroll></div>
             </div>

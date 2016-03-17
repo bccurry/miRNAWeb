@@ -50,7 +50,17 @@
         scope.gridOptionsLogEntropy = {};
         scope.gridOptionsLogEntropy.data = 'logEntropyComponent';
         scope.gridOptionsLogEntropy.columnDefs = [
-            { name: 'LogEntropyTerm', displayName: 'Term' }    
+            {
+                name: 'LogEntropyTerm',
+                displayName: 'Term',
+                cellClass: (grid, row, col, rowRenderIndex, colRenderIndex) => {
+                    if (grid.getCellValue(row, col).indexOf('span') > -1) {
+                        return 'green';
+                    }
+                    return '';
+                },
+                cellTemplate: '<div class="ui-grid-cell-contents" ng-bind-html="row.entity[col.field]"></div>'
+            }    
         ];
 
         scope.cy = cytoscape({
@@ -156,21 +166,29 @@
             scope.abstractComponent = null;
             var selectedNodes = scope.cy.$("node:selected");
             if (selectedNodes.length > 0) {
-                var requestEnumerable = [];
+                var request = {
+                    MirnaEnumerable: [],
+                    TermEnumerable: []
+                };
                 angular.forEach(selectedNodes, (value, key) => {
-                    requestEnumerable.push(value._private.data.name);
+                    if (value._private.data.type === 'miRNA') {
+                        request.MirnaEnumerable.push(value._private.data.name);
+                    } else {
+                        request.TermEnumerable.push(value._private.data.name);
+                    }
                 });
 
-                this.searchSvc.retrieveAbstracts(requestEnumerable).then((result) => {
-
-                    scope.abstractComponent = result.data ? this.$sce.trustAsHtml(result.data) :
+                this.searchSvc.retrieveAbstracts(request).then((result) => {
+                    scope.abstractComponent = result.data.Abstracts ? this.$sce.trustAsHtml(result.data.Abstracts) :
                         this.$sce.trustAsHtml("<div class=\"centered\"><b>No common abstracts for the selected miRNAs found</b></div>");
 
-                    scope.abstractSectionClass = result.data ? "panel-body scroll-vertical" : "panel-body";
+                    scope.abstractSectionClass = result.data.Abstracts ? "panel-body scroll-vertical" : "panel-body";
+                    scope.abstractCount = result.data.Abstracts ? result.data.Count : null;
                 });
             } else {
                 scope.abstractComponent = this.$sce.trustAsHtml("<div class=\"centered\"><b>No miRNAs selected</b></div>");
                 scope.abstractSectionClass = "panel-body";
+                scope.abstractCount = null;
             }        
         }
 
@@ -179,21 +197,36 @@
         };
 
         scope.retrieveLogEntropys = () => {
-            scope.logEntropyComponent = null;
+            scope.logEntropyComponent = [];
+            console.log(scope.logEntropyComponent);
             var selectedNodes = scope.cy.$("node:selected");
             if (selectedNodes.length > 0) {
               
-                var requestEnumerable = [];
+                var request = {
+                    MirnaEnumerable: [],
+                    TermEnumerable: []
+                };
                 angular.forEach(selectedNodes, (value, key) => {
-                    requestEnumerable.push(value._private.data.name);
+                    if (value._private.data.type === 'miRNA') {
+                        request.MirnaEnumerable.push(value._private.data.name);
+                    } else {
+                        request.TermEnumerable.push(value._private.data.name);
+                    }
                 });
 
-                this.searchSvc.retrieveLogEntropys(requestEnumerable).then((result) => {
-                    scope.logEntropyComponent = result.data;
-                    console.log(scope.logEntropyComponent);
+                this.searchSvc.retrieveLogEntropys(request).then((result) => {
+                    scope.logEntropyComponent = result.data.LogEntropys;
+                    scope.logEntropyCount = result.data.Count;
+
+                    var tempThis = this;
+                    scope.logEntropyComponent.forEach((d) => {
+                        tempThis.$sce.trustAsHtml(d.LogEntropyTerm);
+                    });
+
                 });
             } else {
                 scope.logEntropyComponent = null;
+                scope.logEntropyCount = null;
             }
         };
     }

@@ -57,6 +57,7 @@
     <Compile Include="Dispatchers\IQueryDispatcher.cs" />
     <Compile Include="Gateways\MirnaGateway.cs" />
     <Compile Include="Models\Abstract.cs" />
+    <Compile Include="Models\AbstractRequest.cs" />
     <Compile Include="Models\LogEntropy.cs" />
     <Compile Include="Models\LogEntropyResult.cs" />
     <Compile Include="Models\ResultTerm.cs" />

@@ -8,15 +8,14 @@ var SearchSvc = (function () {
         var url = 'api/search';
         return this.$http.post(url, request);
     };
-    SearchSvc.prototype.retrieveAbstracts = function (requestEnumerable) {
+    SearchSvc.prototype.retrieveAbstracts = function (request) {
         var url = 'api/search/abstracts';
-        return this.$http.post(url, requestEnumerable);
+        return this.$http.post(url, request);
     };
-    SearchSvc.prototype.retrieveLogEntropys = function (requestEnumerable) {
+    SearchSvc.prototype.retrieveLogEntropys = function (request) {
         var url = 'api/search/logentropys';
-        return this.$http.post(url, requestEnumerable);
+        return this.$http.post(url, request);
     };
     return SearchSvc;
 })();
 app.service('searchSvc', ['$http', '$q', function ($http, $q) { return new SearchSvc($http, $q); }]);
-//# sourceMappingURL=SearchSvc.js.map

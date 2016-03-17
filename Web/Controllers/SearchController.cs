@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using Data.Dispatchers;
 using Data.Queries;
@@ -18,15 +19,18 @@ namespace Web.Controllers
         private readonly ISearchFactory _searchFactory;
         private readonly IValidationFactory _validationFactory;
         private readonly IAbstractFactory _abstractFactory;
+        private readonly ILogEntropyFactory _logEntropyFactory;
         private readonly IHubContext _hubContext;
         public SearchController(IQueryDispatcher qry, ICommandDispatcher cmd, ISearchFactory searchFactory,
-            IValidationFactory validationFactory, IAbstractFactory abstractFactory)
+            IValidationFactory validationFactory, IAbstractFactory abstractFactory, ILogEntropyFactory logEntropyFactory)
         {
+          
             _qry = qry;
             _cmd = cmd;
             _searchFactory = searchFactory;
             _validationFactory = validationFactory;
             _abstractFactory = abstractFactory;
+            _logEntropyFactory = logEntropyFactory;
             _hubContext =
                         GlobalHost.ConnectionManager.GetHubContext<MessageHub>();
         }
@@ -45,20 +49,28 @@ namespace Web.Controllers
 
         [Route("abstracts")]
         [HttpPost]
-        public string GetAbstracts(IEnumerable<string> requestEnumerable)
+        public dynamic GetAbstracts(NetworkRequest request)
         {
-            var pmidEnumerable = _qry.Dispatch(new AbstractsQuery(requestEnumerable));
+            var pmidEnumerable = _qry.Dispatch(new AbstractsQuery(request.MirnaEnumerable));
             var abstractComponent = _abstractFactory.BuildAbstractComponent(pmidEnumerable);
-            return _abstractFactory.HighlightSearchTerms(requestEnumerable, abstractComponent);
+            return new
+            {
+                Abstracts = _abstractFactory.HighlightSearchTerms(request.MirnaEnumerable, abstractComponent, request.TermEnumerable),
+                Count = pmidEnumerable.Count()
+            };
         }
 
         [Route("logentropys")]
         [HttpPost]
-        public IEnumerable<LogEntropyResult> GetLogEntropys(IEnumerable<string> requestEnumerable)
+        public dynamic GetLogEntropys(NetworkRequest request)
         {
-            var logEntropyEnumerable = _qry.Dispatch(new LogEntropyQuery(requestEnumerable));
-            return logEntropyEnumerable;
-        }
+            var logEntropyEnumerable = _qry.Dispatch(new LogEntropyQuery(request.MirnaEnumerable));
+            return new 
+            {
+                LogEntropys = _logEntropyFactory.HighlightSearchTerms(logEntropyEnumerable, request.TermEnumerable),
+                Count = logEntropyEnumerable.Count()
+            };
+        }    
 
     }
 }
