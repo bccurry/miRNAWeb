@@ -33,13 +33,13 @@ namespace Data.Commands
                     VectorData.VectorMetaData.Type
                 };
                 string processQuery = "INSERT INTO VectorMetaData VALUES (@VectorMetaData_UID, @Type, @Name)";
-                connection.Execute(processQuery, @params);
+                connection.Execute(processQuery, @params, null, commandTimeout: 200);
 
                 processQuery = "INSERT INTO Vector VALUES (@VectorMetaData_UID, @Value, @Vector_UID)";
 
                 foreach (var value in VectorData.Vector.Values)
                 {
-                    connection.Execute(processQuery, new { VectorMetaData_UID = VectorData.VectorMetaData.VectorMetaDataId, Value = value, Vector_UID = 0});
+                    connection.Execute(processQuery, new { VectorMetaData_UID = VectorData.VectorMetaData.VectorMetaDataId, Value = value, Vector_UID = 0}, null, commandTimeout: 200);
                 }
             }
 

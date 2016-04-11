@@ -41,7 +41,7 @@ namespace Jobs.Batch
             //cmd.Dispatch(new BulkInsertAbstractsCommand(abstractList));
             file.Close();
 
-            vectorData = vectorData.Skip(5987).ToList();
+            vectorData = vectorData.Skip(36372).ToList();
             vectorData.ForEach(x => cmd.Dispatch(new BulkInsertVectorsCommand(x)));
                  
         }

@@ -268,3 +268,4 @@ var ResultSection = (function () {
     return ResultSection;
 })();
 app.directive('resultSection', ['searchSvc', '$sce', '$timeout', function (searchSvc, $sce, $timeout) { return new ResultSection(searchSvc, $sce, $timeout); }]);
+//# sourceMappingURL=ResultSection.js.map
