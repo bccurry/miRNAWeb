@@ -43,8 +43,11 @@ namespace Web.Controllers
             var searchTermEnumerable = request.DelimitedSearchTerms.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
             var validatedVectorMetaDataArray = _validationFactory.ValidateSearchTerms(searchTermEnumerable, request.IsMirnaAndTermSearch);
             var compositeVector = _searchFactory.ComputeCompositeVector(validatedVectorMetaDataArray);
-            return request.IsMirnaAndTermSearch ? _searchFactory.ComputeMirnaAndTermResultTerms(compositeVector) 
+            var result = request.IsMirnaAndTermSearch ? _searchFactory.ComputeMirnaAndTermResultTerms(compositeVector) 
                 : _searchFactory.ComputeMirnaResultTerms(compositeVector);
+            result.MirnaResultTerms = _searchFactory.ItalicizeSearchTerms(result.MirnaResultTerms, searchTermEnumerable);
+            result.TermResultTerms = request.IsMirnaAndTermSearch ? _searchFactory.ItalicizeSearchTerms(result.TermResultTerms, searchTermEnumerable) : result.TermResultTerms;
+            return result;
         }
 
         [Route("abstracts")]

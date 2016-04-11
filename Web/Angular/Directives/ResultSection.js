@@ -1,5 +1,5 @@
 var ResultSection = (function () {
-    function ResultSection(searchSvc, $sce) {
+    function ResultSection(searchSvc, $sce, $timeout) {
         var _this = this;
         this.restrict = 'E'; //E = element, A = attribute, C = class, M = comment         
         this.scope = {
@@ -22,6 +22,9 @@ var ResultSection = (function () {
                     else {
                         scope.gridClass = "";
                     }
+                    _this.$timeout(function () {
+                        scope.initNetwork();
+                    }, 3000);
                 }
             });
             scope.abstractSectionClass = "panel-body";
@@ -29,13 +32,33 @@ var ResultSection = (function () {
             scope.gridOptionsMirna = {};
             scope.gridOptionsMirna.data = 'resultList.MirnaResultTerms';
             scope.gridOptionsMirna.columnDefs = [
-                { name: 'Name', displayName: 'MiRNA', cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.IsActive" ng-change="grid.appScope.addOrRemoveNode(row.entity)"> {{row.entity[col.field]}}</div>' },
+                {
+                    name: 'Name',
+                    displayName: 'MiRNA',
+                    cellClass: function (grid, row, col, rowRenderIndex, colRenderIndex) {
+                        if (grid.getCellValue(row, col).indexOf('span') > -1) {
+                            return 'italics';
+                        }
+                        return '';
+                    },
+                    cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.IsActive" ng-change="grid.appScope.addOrRemoveNode(row.entity)"> <a ng-href="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc={{row.entity.Accession}}" target="_blank" ng-bind-html="row.entity[col.field]"></a></div>'
+                },
                 { name: 'Value', displayName: 'Score' }
             ];
             scope.gridOptionsTerm = {};
             scope.gridOptionsTerm.data = 'resultList.TermResultTerms';
             scope.gridOptionsTerm.columnDefs = [
-                { name: 'Name', displayName: 'Term', cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.IsActive" ng-change="grid.appScope.addOrRemoveNode(row.entity)"> {{row.entity[col.field]}}</div>' },
+                {
+                    name: 'Name',
+                    displayName: 'Term',
+                    cellClass: function (grid, row, col, rowRenderIndex, colRenderIndex) {
+                        if (grid.getCellValue(row, col).indexOf('font-style') > -1) {
+                            return 'italics';
+                        }
+                        return '';
+                    },
+                    cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.IsActive" ng-change="grid.appScope.addOrRemoveNode(row.entity)"><span ng-bind-html="row.entity[col.field]"></span></div>'
+                },
                 { name: 'Value', displayName: 'Score' }
             ];
             scope.gridOptionsLogEntropy = {};
@@ -69,7 +92,7 @@ var ResultSection = (function () {
                     .selector('node[type = "miRNA"]')
                     .css({
                     'background-color': '#EE2C2C',
-                    'text-outline-color': '#EE2C2C',
+                    'text-outline-color': '#000000',
                     'shape': 'ellipse',
                     'width': '60px',
                     'height': '30px'
@@ -77,7 +100,7 @@ var ResultSection = (function () {
                     .selector('node[type = "term"]')
                     .css({
                     'background-color': '#FFD700',
-                    'text-outline-color': '#FFD700',
+                    'text-outline-color': '#000000',
                     'shape': 'rectangle',
                     'width': '60px',
                     'height': '30px'
@@ -100,7 +123,6 @@ var ResultSection = (function () {
                 elements: []
             });
             scope.addOrRemoveNode = function (rowEntity) {
-                console.log(rowEntity.$$hashKey);
                 if (rowEntity.IsActive) {
                     scope.addNode(rowEntity);
                     scope.addEdge(rowEntity);
@@ -108,10 +130,11 @@ var ResultSection = (function () {
                 else {
                     scope.removeNode(rowEntity);
                 }
+                scope.getNetworkCount();
             };
             scope.addNode = function (rowEntity) {
                 scope.cy.add({
-                    data: { "id": rowEntity.$$hashKey, "name": rowEntity.Name, "score": rowEntity.Value, "type": rowEntity.Type, "query": true, "gene": true },
+                    data: { "id": rowEntity.$$hashKey, "name": rowEntity.Description, "score": rowEntity.Value, "type": rowEntity.Type, "query": true, "gene": true },
                     position: { "x": Math.floor((Math.random() * 400) + 1), "y": Math.floor((Math.random() * 400) + 1) },
                     group: "nodes"
                 });
@@ -120,7 +143,6 @@ var ResultSection = (function () {
                 scope.cy.remove(scope.cy.getElementById(rowEntity.$$hashKey));
             };
             scope.addEdge = function (rowEntity) {
-                console.log(rowEntity.Value + " " + rowEntity.Type);
                 angular.forEach(scope.cy.nodes(), function (obj, idx) {
                     var currentNode = obj.data();
                     if (rowEntity.$$hashKey !== currentNode.id) {
@@ -206,10 +228,43 @@ var ResultSection = (function () {
                     scope.logEntropyCount = null;
                 }
             };
+            scope.initNetwork = function () {
+                angular.forEach(scope.resultList.MirnaResultTerms, function (obj, idx) {
+                    if (idx < 5) {
+                        obj.IsActive = true;
+                        scope.addNode(obj);
+                        scope.addEdge(obj);
+                    }
+                });
+                angular.forEach(scope.resultList.TermResultTerms, function (obj, idx) {
+                    if (idx < 5) {
+                        obj.IsActive = true;
+                        scope.addNode(obj);
+                        scope.addEdge(obj);
+                    }
+                });
+                scope.getNetworkCount();
+            };
+            scope.getNetworkCount = function () {
+                scope.mirnaNodeCount = 0;
+                scope.termNodeCount = 0;
+                angular.forEach(scope.resultList.MirnaResultTerms, function (obj, idx) {
+                    if (obj.IsActive === true) {
+                        scope.mirnaNodeCount += 1;
+                    }
+                });
+                angular.forEach(scope.resultList.TermResultTerms, function (obj, idx) {
+                    if (obj.IsActive === true) {
+                        scope.termNodeCount += 1;
+                    }
+                });
+                scope.edgeCount = scope.cy.edges().length;
+            };
         };
         this.searchSvc = searchSvc;
         this.$sce = $sce;
+        this.$timeout = $timeout;
     }
     return ResultSection;
 })();
-app.directive('resultSection', ['searchSvc', '$sce', function (searchSvc, $sce) { return new ResultSection(searchSvc, $sce); }]);
+app.directive('resultSection', ['searchSvc', '$sce', '$timeout', function (searchSvc, $sce, $timeout) { return new ResultSection(searchSvc, $sce, $timeout); }]);

@@ -33,6 +33,9 @@
         background-color: #76EE00;
     }
 
+    .italics {
+        font-style: italic;
+    }
 </style>
 
 <div class="container">
@@ -40,10 +43,10 @@
         
         <!-- Grid Section -->
         <div class="col-md-5 result-block wow fadeInLeft animated panel panel-primary" style="float: left" data-wow-delay="0.1s">
-            <div class="panel-heading heading">Search Results</div>
+            <div class="panel-heading heading">Search Results {{resultList.TermResultTerms ? "(" + resultList.MirnaResultTermsCount + " miRNAs, " + resultList.TermResultTermsCount + " terms)" : (resultList.MirnaResultTerms ? "(" + resultList.MirnaResultTermsCount + " miRNAs)" : "")}}</div>
             <div class="panel-body">
                 <div ng-class="gridClass">
-                    <div id="gridMrina" ng-if="resultList.MirnaResultTerms" ui-grid="gridOptionsMirna" class="grid" ui-grid-infinite-scroll></div>
+                    <div id="gridMirna" ng-if="resultList.MirnaResultTerms" ui-grid="gridOptionsMirna" class="grid" ui-grid-infinite-scroll></div>
                 </div>
                 <div class="col-md-6">
                     <div id="gridTerm" ng-if="resultList.TermResultTerms" ui-grid="gridOptionsTerm" class="grid" ui-grid-infinite-scroll></div>
@@ -51,34 +54,36 @@
             </div>
         </div>
 
+        <!-- Graph Section -->
+        <div class="col-md-5 result-block wow fadeInLeft animated panel panel-primary" style="float: right;" data-wow-delay="0.1s">
+            <div class="panel-heading heading">Network {{resultList.MirnaResultTerms ? "(" + mirnaNodeCount  + " miRNAs, " + termNodeCount + " terms, " + edgeCount + " edges)" : ""}}
+<!--            <a class="btn btn-primary btn-render" ng-click="retrieveLogEntropys()">Render Related Terms</a> -->
+            <a class="btn btn-primary btn-render" style="margin-right: 5px" ng-click="retrieveAbstracts()">Render Abstracts</a>
+            </div>
+            <div class="panel-body">
+                <div id="cy" style="width: 100%; height: 400px; display: block;"></div>
+            </div>
+        </div>    
+
+    </div><!-- /row -->
+
+    <div class="row">
+
         <!-- Abstract Section -->
-        <div class="col-md-5 result-block wow fadeInLeft animated panel panel-primary" style="float: right;" data-wow-delay="0.2s">
+        <div class="col-md-12 result-block wow fadeInLeft animated panel panel-primary" style="float: left;" data-wow-delay="0.2s">
             <div class="panel-heading heading">Abstracts {{abstractCount ? "(" + abstractCount + ")" : ""}}</div>
             <div ng-class="abstractSectionClass" style="max-height: 391px">
                 <div ng-if="abstractComponent" ng-bind-html="abstractComponent"></div>
             </div>
         </div>
 
-    </div><!-- /row -->
-
-    <div class="row">
-
-        <!-- Graph Section -->
-        <div class="col-md-5 result-block wow fadeInLeft animated panel panel-primary" style="float: left;" data-wow-delay="0.1s">
-            <div class="panel-heading heading">Network <a class="btn btn-primary btn-render" ng-click="retrieveLogEntropys()">Render Related Terms</a> <a class="btn btn-primary btn-render" style="margin-right: 5px" ng-click="retrieveAbstracts()">Render Abstracts</a></div>
-            <div class="panel-body">
-                <div id="cy" style="width: 100%; height: 400px; display: block;"></div>
-            </div>
-        </div>
-
-
         <!-- Log Entropy Section -->
-        <div class="col-md-5 result-block wow fadeInLeft animated panel panel-primary" style="float: right;" data-wow-delay="0.2s">
-            <div class="panel-heading heading">Related Terms {{logEntropyCount ? "(" + logEntropyCount + ")" : ""}}</div>
-            <div class="panel-body">
-                <div id="gridLog" ng-if="logEntropyComponent" ui-grid="gridOptionsLogEntropy" class="grid" ui-grid-infinite-scroll></div>
-            </div>
-        </div>
+<!--        <div class="col-md-5 result-block wow fadeInLeft animated panel panel-primary" style="float: right;" data-wow-delay="0.2s">-->
+<!--            <div class="panel-heading heading">Related Terms {{logEntropyCount ? "(" + logEntropyCount + ")" : ""}}</div>-->
+<!--            <div class="panel-body">-->
+<!--                <div id="gridLog" ng-if="logEntropyComponent" ui-grid="gridOptionsLogEntropy" class="grid" ui-grid-infinite-scroll></div>-->
+<!--            </div>-->
+<!--        </div>-->
 
     </div><!-- /row -->
 

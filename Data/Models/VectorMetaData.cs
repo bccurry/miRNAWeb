@@ -11,5 +11,6 @@ namespace Data.Models
         public int VectorMetaDataId { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
+        public string Accession { get; set; }
     }
 }

@@ -10,5 +10,7 @@ namespace Data.Models
     {
         public IEnumerable<ResultTerm> MirnaResultTerms { get; set; } 
         public IEnumerable<ResultTerm> TermResultTerms { get; set; }
+        public int MirnaResultTermsCount { get; set; }
+        public int TermsResultTermsCount { get; set; }
     }
 }

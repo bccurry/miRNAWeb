@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Commands\BulkInsertLogEntropysCommand.cs" />
     <Compile Include="Commands\BulkInsertAbstractsCommand.cs" />
+    <Compile Include="Commands\BulkInsertVectorsCommand.cs" />
     <Compile Include="Dispatchers\ICommandDispatcher.cs" />
     <Compile Include="Dispatchers\IQueryDispatcher.cs" />
     <Compile Include="Gateways\MirnaGateway.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Models\SearchRequest.cs" />
     <Compile Include="Models\SearchResult.cs" />
     <Compile Include="Models\Vector.cs" />
+    <Compile Include="Models\VectorJobData.cs" />
     <Compile Include="Models\VectorMetaData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

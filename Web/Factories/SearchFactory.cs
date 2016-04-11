@@ -16,6 +16,8 @@ namespace Web.Factories
         double[] ComputeCompositeVector(IEnumerable<VectorMetaData> searchEnumerable);
         SearchResult ComputeMirnaResultTerms(double[] compositeVector);
         SearchResult ComputeMirnaAndTermResultTerms(double[] compositeVector);
+        IEnumerable<ResultTerm> ItalicizeSearchTerms(IEnumerable<ResultTerm> resultEnumerable,
+            IEnumerable<string> searchEnumerable);
     }
 
     public class SearchFactory : ISearchFactory
@@ -64,9 +66,13 @@ namespace Web.Factories
                     Type = x.Type,
                     Value =
                         ComputeCosineSimilarity(compositeVector,
-                            _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx, mirnaVectorCount)
-                }).OrderByDescending(x => x.Value).Take(50)
-            };  
+                            _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx, mirnaVectorCount),
+                    Accession = x.Accession,
+                    Description = x.Name
+                }).OrderByDescending(x => x.Value).Take(50),
+                MirnaResultTermsCount = 50,
+                TermsResultTermsCount = 300
+            };
         }
 
         public SearchResult ComputeMirnaAndTermResultTerms(double[] compositeVector)
@@ -83,18 +89,37 @@ namespace Web.Factories
                     Type = x.Type,
                     Value =
                         ComputeCosineSimilarity(compositeVector,
-                            _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx, totalVectorIdsCount)
+                            _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx, totalVectorIdsCount),
+                    Accession = x.Accession,
+                    Description = x.Name
                 }).OrderByDescending(x => x.Value).Take(50),
 
                 TermResultTerms = termVectorIds.Select((x, idx) => new ResultTerm
                 {
                     Name = x.Name,
                     Type = x.Type,
-                    Value = ComputeCosineSimilarity(compositeVector, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx + mirnaVectorIds.Count(), totalVectorIdsCount)
-                }).OrderByDescending(x => x.Value).Take(300)
+                    Value = ComputeCosineSimilarity(compositeVector, _qry.Dispatch(new VectorByNameAndTypeQuery(x.Name, x.Type)).Values, idx + mirnaVectorIds.Count(), totalVectorIdsCount),
+                    Description = x.Name
+                }).OrderByDescending(x => x.Value).Take(300),
+
+                MirnaResultTermsCount = 50,
+                TermsResultTermsCount = 300
             };
 
             return result;
+        }
+
+        public IEnumerable<ResultTerm> ItalicizeSearchTerms(IEnumerable<ResultTerm> resultEnumerable, IEnumerable<string> searchEnumerable)
+        {
+            return resultEnumerable.Select(x => searchEnumerable.Contains(x.Name) ?
+            new ResultTerm
+            {
+                Name = "<span style=\"font-style: italic;\">" + x.Name + "</span>",
+                Type = x.Type,
+                Value = x.Value,
+                Accession = x.Accession,
+                Description = x.Name
+            } : x);
         }
 
     }
